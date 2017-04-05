@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao;
+package models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -159,7 +159,7 @@ public class Task implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.Task[ id=" + id + " ]";
+        return "models.Task[ id=" + id + " ]";
     }
     
 }

@@ -3,38 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao;
+package models;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Настя
  */
 @Entity
-@Table(name = "estimate")
+@Table(name = "status")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Estimate.findAll", query = "SELECT e FROM Estimate e"),
-    @NamedQuery(name = "Estimate.findById", query = "SELECT e FROM Estimate e WHERE e.id = :id"),
-    @NamedQuery(name = "Estimate.findByCDate", query = "SELECT e FROM Estimate e WHERE e.cDate = :cDate")})
-public class Estimate implements Serializable {
+    @NamedQuery(name = "Status.findAll", query = "SELECT s FROM Status s"),
+    @NamedQuery(name = "Status.findById", query = "SELECT s FROM Status s WHERE s.id = :id"),
+    @NamedQuery(name = "Status.findByName", query = "SELECT s FROM Status s WHERE s.name = :name")})
+public class Status implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,26 +44,22 @@ public class Estimate implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "CDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date cDate;
-    @JoinColumn(name = "UserId", referencedColumnName = "Id")
-    @ManyToOne(optional = false)
-    private User userId;
-    @JoinColumn(name = "ProjectId", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Project projectId;
+    @Size(min = 1, max = 45)
+    @Column(name = "Name")
+    private String name;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stausId")
+    private List<Task> taskList;
 
-    public Estimate() {
+    public Status() {
     }
 
-    public Estimate(Integer id) {
+    public Status(Integer id) {
         this.id = id;
     }
 
-    public Estimate(Integer id, Date cDate) {
+    public Status(Integer id, String name) {
         this.id = id;
-        this.cDate = cDate;
+        this.name = name;
     }
 
     public Integer getId() {
@@ -74,28 +70,21 @@ public class Estimate implements Serializable {
         this.id = id;
     }
 
-    public Date getCDate() {
-        return cDate;
+    public String getName() {
+        return name;
     }
 
-    public void setCDate(Date cDate) {
-        this.cDate = cDate;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public User getUserId() {
-        return userId;
+    @XmlTransient
+    public List<Task> getTaskList() {
+        return taskList;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
-    public Project getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Project projectId) {
-        this.projectId = projectId;
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
     }
 
     @Override
@@ -108,10 +97,10 @@ public class Estimate implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Estimate)) {
+        if (!(object instanceof Status)) {
             return false;
         }
-        Estimate other = (Estimate) object;
+        Status other = (Status) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -120,7 +109,7 @@ public class Estimate implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.Estimate[ id=" + id + " ]";
+        return "models.Status[ id=" + id + " ]";
     }
     
 }

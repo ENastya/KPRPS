@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao;
+package models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,13 +28,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Настя
  */
 @Entity
-@Table(name = "status")
+@Table(name = "project")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Status.findAll", query = "SELECT s FROM Status s"),
-    @NamedQuery(name = "Status.findById", query = "SELECT s FROM Status s WHERE s.id = :id"),
-    @NamedQuery(name = "Status.findByName", query = "SELECT s FROM Status s WHERE s.name = :name")})
-public class Status implements Serializable {
+    @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p"),
+    @NamedQuery(name = "Project.findById", query = "SELECT p FROM Project p WHERE p.id = :id"),
+    @NamedQuery(name = "Project.findByName", query = "SELECT p FROM Project p WHERE p.name = :name"),
+    @NamedQuery(name = "Project.findByDescription", query = "SELECT p FROM Project p WHERE p.description = :description")})
+public class Project implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,19 +48,27 @@ public class Status implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "Name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stausId")
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1000)
+    @Column(name = "Description")
+    private String description;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
     private List<Task> taskList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
+    private List<Estimate> estimateList;
 
-    public Status() {
+    public Project() {
     }
 
-    public Status(Integer id) {
+    public Project(Integer id) {
         this.id = id;
     }
 
-    public Status(Integer id, String name) {
+    public Project(Integer id, String name, String description) {
         this.id = id;
         this.name = name;
+        this.description = description;
     }
 
     public Integer getId() {
@@ -78,6 +87,14 @@ public class Status implements Serializable {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @XmlTransient
     public List<Task> getTaskList() {
         return taskList;
@@ -85,6 +102,15 @@ public class Status implements Serializable {
 
     public void setTaskList(List<Task> taskList) {
         this.taskList = taskList;
+    }
+
+    @XmlTransient
+    public List<Estimate> getEstimateList() {
+        return estimateList;
+    }
+
+    public void setEstimateList(List<Estimate> estimateList) {
+        this.estimateList = estimateList;
     }
 
     @Override
@@ -97,10 +123,10 @@ public class Status implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Status)) {
+        if (!(object instanceof Project)) {
             return false;
         }
-        Status other = (Status) object;
+        Project other = (Project) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -109,7 +135,7 @@ public class Status implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.Status[ id=" + id + " ]";
+        return "models.Project[ id=" + id + " ]";
     }
     
 }

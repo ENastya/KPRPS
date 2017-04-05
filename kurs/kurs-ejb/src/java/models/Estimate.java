@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao;
+package models;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -28,15 +28,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Настя
  */
 @Entity
-@Table(name = "process")
+@Table(name = "estimate")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Process.findAll", query = "SELECT p FROM Process p"),
-    @NamedQuery(name = "Process.findById", query = "SELECT p FROM Process p WHERE p.id = :id"),
-    @NamedQuery(name = "Process.findByBTime", query = "SELECT p FROM Process p WHERE p.bTime = :bTime"),
-    @NamedQuery(name = "Process.findByETime", query = "SELECT p FROM Process p WHERE p.eTime = :eTime"),
-    @NamedQuery(name = "Process.findByFullTime", query = "SELECT p FROM Process p WHERE p.fullTime = :fullTime")})
-public class Process implements Serializable {
+    @NamedQuery(name = "Estimate.findAll", query = "SELECT e FROM Estimate e"),
+    @NamedQuery(name = "Estimate.findById", query = "SELECT e FROM Estimate e WHERE e.id = :id"),
+    @NamedQuery(name = "Estimate.findByCDate", query = "SELECT e FROM Estimate e WHERE e.cDate = :cDate")})
+public class Estimate implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -46,35 +44,26 @@ public class Process implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "BTime")
+    @Column(name = "CDate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date bTime;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ETime")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date eTime;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "FullTime")
-    @Temporal(TemporalType.TIME)
-    private Date fullTime;
-    @JoinColumn(name = "TaskId", referencedColumnName = "Id")
+    private Date cDate;
+    @JoinColumn(name = "UserId", referencedColumnName = "Id")
     @ManyToOne(optional = false)
-    private Task taskId;
+    private User userId;
+    @JoinColumn(name = "ProjectId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Project projectId;
 
-    public Process() {
+    public Estimate() {
     }
 
-    public Process(Integer id) {
+    public Estimate(Integer id) {
         this.id = id;
     }
 
-    public Process(Integer id, Date bTime, Date eTime, Date fullTime) {
+    public Estimate(Integer id, Date cDate) {
         this.id = id;
-        this.bTime = bTime;
-        this.eTime = eTime;
-        this.fullTime = fullTime;
+        this.cDate = cDate;
     }
 
     public Integer getId() {
@@ -85,36 +74,28 @@ public class Process implements Serializable {
         this.id = id;
     }
 
-    public Date getBTime() {
-        return bTime;
+    public Date getCDate() {
+        return cDate;
     }
 
-    public void setBTime(Date bTime) {
-        this.bTime = bTime;
+    public void setCDate(Date cDate) {
+        this.cDate = cDate;
     }
 
-    public Date getETime() {
-        return eTime;
+    public User getUserId() {
+        return userId;
     }
 
-    public void setETime(Date eTime) {
-        this.eTime = eTime;
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
-    public Date getFullTime() {
-        return fullTime;
+    public Project getProjectId() {
+        return projectId;
     }
 
-    public void setFullTime(Date fullTime) {
-        this.fullTime = fullTime;
-    }
-
-    public Task getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(Task taskId) {
-        this.taskId = taskId;
+    public void setProjectId(Project projectId) {
+        this.projectId = projectId;
     }
 
     @Override
@@ -127,10 +108,10 @@ public class Process implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Process)) {
+        if (!(object instanceof Estimate)) {
             return false;
         }
-        Process other = (Process) object;
+        Estimate other = (Estimate) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -139,7 +120,7 @@ public class Process implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.Process[ id=" + id + " ]";
+        return "models.Estimate[ id=" + id + " ]";
     }
     
 }

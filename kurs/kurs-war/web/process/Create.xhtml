@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateProcessTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateProcessLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{processController.selected.id}" title="#{bundle.CreateProcessTitle_id}" required="true" requiredMessage="#{bundle.CreateProcessRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.CreateProcessLabel_BTime}" for="BTime" />
+                    <h:inputText id="BTime" value="#{processController.selected.BTime}" title="#{bundle.CreateProcessTitle_BTime}" required="true" requiredMessage="#{bundle.CreateProcessRequiredMessage_BTime}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateProcessLabel_ETime}" for="ETime" />
+                    <h:inputText id="ETime" value="#{processController.selected.ETime}" title="#{bundle.CreateProcessTitle_ETime}" required="true" requiredMessage="#{bundle.CreateProcessRequiredMessage_ETime}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateProcessLabel_fullTime}" for="fullTime" />
+                    <h:inputText id="fullTime" value="#{processController.selected.fullTime}" title="#{bundle.CreateProcessTitle_fullTime}" required="true" requiredMessage="#{bundle.CreateProcessRequiredMessage_fullTime}">
+                        <f:convertDateTime pattern="HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateProcessLabel_taskId}" for="taskId" />
+                    <h:selectOneMenu id="taskId" value="#{processController.selected.taskId}" title="#{bundle.CreateProcessTitle_taskId}" required="true" requiredMessage="#{bundle.CreateProcessRequiredMessage_taskId}">
+                        <f:selectItems value="#{taskController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{processController.create}" value="#{bundle.CreateProcessSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{processController.prepareList}" value="#{bundle.CreateProcessShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateProcessIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

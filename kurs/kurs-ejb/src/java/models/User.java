@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao;
+package models;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -169,7 +169,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.User[ id=" + id + " ]";
+        return "models.User[ id=" + id + " ]";
     }
     
 }

@@ -11,6 +11,4 @@
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="java:module/tt" object-type="user" pool-name="mysql_time_tracking_rootPool"/>
-    <jdbc-resource enabled="true" jndi-name="java:module/tt" object-type="user" pool-name="mysql_time_tracking_rootPool"/>
-    <jdbc-resource enabled="true" jndi-name="java:module/tt" object-type="user" pool-name="mysql_time_tracking_rootPool"/>
 </resources>
