@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateEstimateTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateEstimateLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{estimateController.selected.id}" title="#{bundle.CreateEstimateTitle_id}" required="true" requiredMessage="#{bundle.CreateEstimateRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.CreateEstimateLabel_CDate}" for="CDate" />
+                    <h:inputText id="CDate" value="#{estimateController.selected.CDate}" title="#{bundle.CreateEstimateTitle_CDate}" required="true" requiredMessage="#{bundle.CreateEstimateRequiredMessage_CDate}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateEstimateLabel_userId}" for="userId" />
+                    <h:selectOneMenu id="userId" value="#{estimateController.selected.userId}" title="#{bundle.CreateEstimateTitle_userId}" required="true" requiredMessage="#{bundle.CreateEstimateRequiredMessage_userId}">
+                        <f:selectItems value="#{userController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.CreateEstimateLabel_projectId}" for="projectId" />
+                    <h:selectOneMenu id="projectId" value="#{estimateController.selected.projectId}" title="#{bundle.CreateEstimateTitle_projectId}" required="true" requiredMessage="#{bundle.CreateEstimateRequiredMessage_projectId}">
+                        <f:selectItems value="#{projectController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{estimateController.create}" value="#{bundle.CreateEstimateSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{estimateController.prepareList}" value="#{bundle.CreateEstimateShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateEstimateIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

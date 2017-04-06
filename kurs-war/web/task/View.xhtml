@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewTaskTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewTaskLabel_id}"/>
+                    <h:outputText value="#{taskController.selected.id}" title="#{bundle.ViewTaskTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewTaskLabel_description}"/>
+                    <h:outputText value="#{taskController.selected.description}" title="#{bundle.ViewTaskTitle_description}"/>
+                    <h:outputText value="#{bundle.ViewTaskLabel_name}"/>
+                    <h:outputText value="#{taskController.selected.name}" title="#{bundle.ViewTaskTitle_name}"/>
+                    <h:outputText value="#{bundle.ViewTaskLabel_userId}"/>
+                    <h:outputText value="#{taskController.selected.userId}" title="#{bundle.ViewTaskTitle_userId}"/>
+                    <h:outputText value="#{bundle.ViewTaskLabel_projectId}"/>
+                    <h:outputText value="#{taskController.selected.projectId}" title="#{bundle.ViewTaskTitle_projectId}"/>
+                    <h:outputText value="#{bundle.ViewTaskLabel_stausId}"/>
+                    <h:outputText value="#{taskController.selected.stausId}" title="#{bundle.ViewTaskTitle_stausId}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{taskController.destroyAndView}" value="#{bundle.ViewTaskDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewTaskEditLink}"/>
+                <br />
+                <h:commandLink action="#{taskController.prepareCreate}" value="#{bundle.ViewTaskCreateLink}" />
+                <br />
+                <h:commandLink action="#{taskController.prepareList}" value="#{bundle.ViewTaskShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewTaskIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

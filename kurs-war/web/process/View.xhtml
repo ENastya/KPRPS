@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewProcessTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewProcessLabel_id}"/>
+                    <h:outputText value="#{processController.selected.id}" title="#{bundle.ViewProcessTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewProcessLabel_BTime}"/>
+                    <h:outputText value="#{processController.selected.BTime}" title="#{bundle.ViewProcessTitle_BTime}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewProcessLabel_ETime}"/>
+                    <h:outputText value="#{processController.selected.ETime}" title="#{bundle.ViewProcessTitle_ETime}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewProcessLabel_fullTime}"/>
+                    <h:outputText value="#{processController.selected.fullTime}" title="#{bundle.ViewProcessTitle_fullTime}">
+                        <f:convertDateTime pattern="HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewProcessLabel_taskId}"/>
+                    <h:outputText value="#{processController.selected.taskId}" title="#{bundle.ViewProcessTitle_taskId}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{processController.destroyAndView}" value="#{bundle.ViewProcessDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewProcessEditLink}"/>
+                <br />
+                <h:commandLink action="#{processController.prepareCreate}" value="#{bundle.ViewProcessCreateLink}" />
+                <br />
+                <h:commandLink action="#{processController.prepareList}" value="#{bundle.ViewProcessShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewProcessIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
