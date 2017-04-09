@@ -1,0 +1,9 @@
+/kurs-ejb/build/
+/kurs-war/build/
+/build/
+/kurs-war/dist/
+/kurs-ejb/dist/
+/dist/
+/kurs-ejb/nbproject/private/
+/kurs-war/nbproject/private/
+/nbproject/private/
