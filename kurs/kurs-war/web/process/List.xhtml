@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListProcessTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:form styleClass="jsfcrud_list_form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:outputText escape="false" value="#{bundle.ListProcessEmpty}" rendered="#{processController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{processController.items.rowCount > 0}">
+                    <h:outputText value="#{processController.pagination.pageFirstItem + 1}..#{processController.pagination.pageLastItem + 1}/#{processController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{processController.previous}" value="#{bundle.Previous} #{processController.pagination.pageSize}" rendered="#{processController.pagination.hasPreviousPage}"/>&nbsp;
+                    <h:commandLink action="#{processController.next}" value="#{bundle.Next} #{processController.pagination.pageSize}" rendered="#{processController.pagination.hasNextPage}"/>&nbsp;
+                    <h:dataTable value="#{processController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProcessTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProcessTitle_BTime}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.BTime}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProcessTitle_ETime}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ETime}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProcessTitle_fullTime}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fullTime}">
+                                <f:convertDateTime pattern="HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProcessTitle_taskId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.taskId}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                            <h:commandLink action="#{processController.prepareView}" value="#{bundle.ListProcessViewLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{processController.prepareEdit}" value="#{bundle.ListProcessEditLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{processController.destroy}" value="#{bundle.ListProcessDestroyLink}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+                <br />
+                <h:commandLink action="#{processController.prepareCreate}" value="#{bundle.ListProcessCreateLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ListProcessIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
