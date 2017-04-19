@@ -13,4 +13,5 @@
     <jdbc-resource enabled="true" jndi-name="java:module/tt" object-type="user" pool-name="mysql_time_tracking_rootPool"/>
     <jdbc-resource enabled="true" jndi-name="java:module/tt" object-type="user" pool-name="mysql_time_tracking_rootPool"/>
     <jdbc-resource enabled="true" jndi-name="java:module/tt" object-type="user" pool-name="mysql_time_tracking_rootPool"/>
+    <jdbc-resource enabled="true" jndi-name="java:module/time_tracking" object-type="user" pool-name="mysql_time_tracking_rootPool"/>
 </resources>
