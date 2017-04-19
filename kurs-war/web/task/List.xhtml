@@ -7,7 +7,7 @@
 
     <ui:composition template="/template.xhtml">
         <ui:define name="title">
-            <h:outputText value="#{bundle.ListTaskTitle}"></h:outputText>
+            <h:outputText value="Мои Задачи"></h:outputText>
         </ui:define>
         <ui:define name="body">
             <h:form styleClass="jsfcrud_list_form">
@@ -22,57 +22,27 @@
                     <h:dataTable value="#{taskController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
                         <h:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListTaskTitle_id}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.id}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListTaskTitle_description}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.description}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListTaskTitle_name}"/>
+                                <h:outputText value="Мои Здачи"/>
                             </f:facet>
                             <h:outputText value="#{item.name}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListTaskTitle_userId}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.userId}"/>
+                            <h:outputText value="#{item.projectId.name}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListTaskTitle_projectId}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.projectId}"/>
+                            <h:outputText value="#{item.stausId.name}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListTaskTitle_stausId}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.stausId}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="&nbsp;"/>
-                            </f:facet>
-                            <h:commandLink action="#{taskController.prepareView}" value="#{bundle.ListTaskViewLink}"/>
+                            <h:commandLink action="#{taskController.prepareView}" value="Подробнее"/>
                             <h:outputText value=" "/>
-                            <h:commandLink action="#{taskController.prepareEdit}" value="#{bundle.ListTaskEditLink}"/>
-                            <h:outputText value=" "/>
-                            <h:commandLink action="#{taskController.destroy}" value="#{bundle.ListTaskDestroyLink}"/>
                         </h:column>
                     </h:dataTable>
                 </h:panelGroup>
                 <br />
-                <h:commandLink action="#{taskController.prepareCreate}" value="#{bundle.ListTaskCreateLink}"/>
+                <h:commandLink action="#{taskController.prepareCreate}" value="Добаить задачу"/>
                 <br />
                 <br />
-                <h:link outcome="/index" value="#{bundle.ListTaskIndexLink}"/>
+                <h:link outcome="/index" value="На главную"/>
             </h:form>
         </ui:define>
     </ui:composition>

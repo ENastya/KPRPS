@@ -17,7 +17,7 @@ import models.Process;
 @Stateless
 public class ProcessFacade extends AbstractFacade<Process> {
 
-    @PersistenceContext(unitName = "kurs-warPU")
+    @PersistenceContext(unitName = "kurs-ejbPU")
     private EntityManager em;
 
     @Override

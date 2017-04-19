@@ -17,7 +17,7 @@ import models.Project;
 @Stateless
 public class ProjectFacade extends AbstractFacade<Project> {
 
-    @PersistenceContext(unitName = "kurs-warPU")
+    @PersistenceContext(unitName = "kurs-ejbPU")
     private EntityManager em;
 
     @Override

@@ -7,7 +7,7 @@
 
     <ui:composition template="/template.xhtml">
         <ui:define name="title">
-            <h:outputText value="#{bundle.CreateTaskTitle}"></h:outputText>
+            <h:outputText value="Добавить"></h:outputText>
         </ui:define>
         <ui:define name="body">
             <h:panelGroup id="messagePanel" layout="block">
@@ -15,33 +15,31 @@
             </h:panelGroup>
             <h:form>
                 <h:panelGrid columns="2">
-                    <h:outputLabel value="#{bundle.CreateTaskLabel_id}" for="id" />
-                    <h:inputText id="id" value="#{taskController.selected.id}" title="#{bundle.CreateTaskTitle_id}" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_id}"/>
-                    <h:outputLabel value="#{bundle.CreateTaskLabel_description}" for="description" />
-                    <h:inputText id="description" value="#{taskController.selected.description}" title="#{bundle.CreateTaskTitle_description}" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_description}"/>
-                    <h:outputLabel value="#{bundle.CreateTaskLabel_name}" for="name" />
-                    <h:inputText id="name" value="#{taskController.selected.name}" title="#{bundle.CreateTaskTitle_name}" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_name}"/>
-                    <h:outputLabel value="#{bundle.CreateTaskLabel_userId}" for="userId" />
-                    <h:selectOneMenu id="userId" value="#{taskController.selected.userId}" title="#{bundle.CreateTaskTitle_userId}" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_userId}">
+                    <h:outputLabel value="Название" for="name" />
+                    <h:inputText id="name" value="#{taskController.selected.name}" title="Название" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_name}"/>
+                    <h:outputLabel value="Описание" for="description" />
+                    <h:inputText id="description" value="#{taskController.selected.description}" title="Пользователь" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_description}"/>
+                    <h:outputLabel value="Пльзователь" for="userId" />
+                    <h:selectOneMenu id="userId" value="#{taskController.selected.userId}" title="Пользователь" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_userId}">
                         <f:selectItems value="#{userController.itemsAvailableSelectOne}"/>
                     </h:selectOneMenu>
-                    <h:outputLabel value="#{bundle.CreateTaskLabel_projectId}" for="projectId" />
-                    <h:selectOneMenu id="projectId" value="#{taskController.selected.projectId}" title="#{bundle.CreateTaskTitle_projectId}" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_projectId}">
+                    <h:outputLabel value="Проект" for="projectId" />
+                    <h:selectOneMenu id="projectId" value="#{taskController.selected.projectId}" title="Проект" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_projectId}">
                         <f:selectItems value="#{projectController.itemsAvailableSelectOne}"/>
                     </h:selectOneMenu>
-                    <h:outputLabel value="#{bundle.CreateTaskLabel_stausId}" for="stausId" />
-                    <h:selectOneMenu id="stausId" value="#{taskController.selected.stausId}" title="#{bundle.CreateTaskTitle_stausId}" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_stausId}">
+                    <h:outputLabel value="Статус" for="stausId" />
+                    <h:selectOneMenu id="stausId" value="#{taskController.selected.stausId}" title="Статус" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_stausId}">
                         <f:selectItems value="#{statusController.itemsAvailableSelectOne}"/>
                     </h:selectOneMenu>
                 </h:panelGrid>
                 <br />
-                <h:commandLink action="#{taskController.create}" value="#{bundle.CreateTaskSaveLink}" />
+                <h:commandLink action="#{taskController.create}" value="Добавить" />
                 <br />
                 <br />
-                <h:commandLink action="#{taskController.prepareList}" value="#{bundle.CreateTaskShowAllLink}" immediate="true"/>
+                <h:commandLink action="#{taskController.prepareList}" value="Мои задачи" immediate="true"/>
                 <br />
                 <br />
-                <h:link outcome="/index" value="#{bundle.CreateTaskIndexLink}"/>
+                <h:link outcome="/index" value="На главную"/>
             </h:form>
         </ui:define>
     </ui:composition>

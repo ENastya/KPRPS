@@ -17,7 +17,7 @@ import models.User;
 @Stateless
 public class UserFacade extends AbstractFacade<User> {
 
-    @PersistenceContext(unitName = "kurs-warPU")
+    @PersistenceContext(unitName = "kurs-ejbPU")
     private EntityManager em;
 
     @Override

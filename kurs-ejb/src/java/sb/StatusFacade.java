@@ -17,7 +17,7 @@ import models.Status;
 @Stateless
 public class StatusFacade extends AbstractFacade<Status> {
 
-    @PersistenceContext(unitName = "kurs-warPU")
+    @PersistenceContext(unitName = "kurs-ejbPU")
     private EntityManager em;
 
     @Override
