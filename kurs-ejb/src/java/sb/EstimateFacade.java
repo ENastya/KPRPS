@@ -17,7 +17,7 @@ import models.Estimate;
 @Stateless
 public class EstimateFacade extends AbstractFacade<Estimate> {
 
-    @PersistenceContext(unitName = "kurs-warPU")
+    @PersistenceContext(unitName = "kurs-ejbPU")
     private EntityManager em;
 
     @Override

@@ -17,7 +17,7 @@ import models.Task;
 @Stateless
 public class TaskFacade extends AbstractFacade<Task> {
 
-    @PersistenceContext(unitName = "kurs-warPU")
+    @PersistenceContext(unitName = "kurs-ejbPU")
     private EntityManager em;
 
     @Override
