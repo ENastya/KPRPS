@@ -169,7 +169,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "models.User[ id=" + id + " ]";
+        return this.fio;
     }
     
 }
