@@ -508,6 +508,9 @@ p.subtitle {
     padding: 6px 10px !important;
 }
 
+body {
+    min-height: 100vh;
+}
 
 @media(max-width: 425px){
     .container>.navbar-header, .container>.navbar-collapse {
