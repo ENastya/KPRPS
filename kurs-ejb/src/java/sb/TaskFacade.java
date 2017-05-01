@@ -5,9 +5,12 @@
  */
 package sb;
 
+import java.util.List;
 import javax.ejb.Stateless;
+import javax.faces.model.ListDataModel;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import models.Task;
 
 /**
@@ -24,9 +27,21 @@ public class TaskFacade extends AbstractFacade<Task> {
     protected EntityManager getEntityManager() {
         return em;
     }
-
+    
     public TaskFacade() {
         super(Task.class);
+    }
+    
+    public List getByUser(int id){
+        TypedQuery <Task> q = em.createNamedQuery("Task.findByUser", Task.class).setParameter("userid", id);
+        List mylist = q.getResultList();
+        return q.getResultList();
+    }
+    
+     public List getByActive(){
+        TypedQuery <Task> q = em.createNamedQuery("Task.findActive", Task.class);
+        List mylist = q.getResultList();
+        return q.getResultList();
     }
     
 }

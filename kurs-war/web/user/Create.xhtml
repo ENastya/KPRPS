@@ -23,7 +23,7 @@
                     <h:inputText id="role" value="#{userController.selected.role}" title="#{bundle.CreateUserTitle_role}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_role}"/>
                     <h:outputLabel value="#{bundle.CreateUserLabel_lastEstimate}" for="lastEstimate" />
                     <h:inputText id="lastEstimate" value="#{userController.selected.lastEstimate}" title="#{bundle.CreateUserTitle_lastEstimate}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_lastEstimate}">
-                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
                     </h:inputText>
                     <h:outputLabel value="#{bundle.CreateUserLabel_fio}" for="fio" />
                     <h:inputText id="fio" value="#{userController.selected.fio}" title="#{bundle.CreateUserTitle_fio}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_fio}"/>
