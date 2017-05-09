@@ -19,9 +19,9 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("taskController")
+@Named("activeTaskController")
 @SessionScoped
-public class TaskController implements Serializable {
+public class ActiveTaskController implements Serializable {
 
     private Task current;
     private DataModel items = null;
@@ -29,9 +29,9 @@ public class TaskController implements Serializable {
     private sb.TaskFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-    private boolean active = false;
+    private boolean active = true;
     
-    public TaskController() {
+    public ActiveTaskController() {
     }
 
     public Task getSelected() {
@@ -71,15 +71,11 @@ public class TaskController implements Serializable {
     }
 
     public String prepareList() {
-        recreateModel();
-        return "List";
-    }
-    
-    public String prepareActiveList(){ 
+        setActive(false);
         recreateModel();
         return "ActiveList";
     }
-
+    
     public String prepareView() {
         current = (Task) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
@@ -228,7 +224,7 @@ public class TaskController implements Serializable {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            TaskController controller = (TaskController) facesContext.getApplication().getELResolver().
+            ActiveTaskController controller = (ActiveTaskController) facesContext.getApplication().getELResolver().
                     getValue(facesContext.getELContext(), null, "taskController");
             return controller.getTask(getKey(value));
         }

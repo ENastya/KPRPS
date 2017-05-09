@@ -16,12 +16,12 @@
                 <h:panelGroup id="messagePanel" layout="block">
                     <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                 </h:panelGroup>
-                <h:outputText escape="false" value="#{bundle.ListTaskEmpty}" rendered="#{taskController.items.rowCount == 0}"/>
-                <h:panelGroup rendered="#{taskController.items.rowCount > 0}">
-                    <h:outputText value="#{taskController.pagination.pageFirstItem + 1}..#{taskController.pagination.pageLastItem + 1}/#{taskController.pagination.itemsCount}"/>&nbsp;
-                    <h:commandLink action="#{taskController.previous}" value="#{bundle.Previous} #{taskController.pagination.pageSize}" rendered="#{taskController.pagination.hasPreviousPage}"/>&nbsp;
-                    <h:commandLink action="#{taskController.next}" value="#{bundle.Next} #{taskController.pagination.pageSize}" rendered="#{taskController.pagination.hasNextPage}"/>&nbsp;
-                    <h:dataTable value="#{taskController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                <h:outputText escape="false" value="#{bundle.ListTaskEmpty}" rendered="#{activeTaskController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{activeTaskController.items.rowCount > 0}">
+                    <h:outputText value="#{activeTaskController.pagination.pageFirstItem + 1}..#{activeTaskController.pagination.pageLastItem + 1}/#{activeTaskController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{activeTaskController.previous}" value="#{bundle.Previous} #{activeTaskController.pagination.pageSize}" rendered="#{taskController.pagination.hasPreviousPage}"/>&nbsp;
+                    <h:commandLink action="#{activeTaskController.next}" value="#{bundle.Next} #{activeTaskController.pagination.pageSize}" rendered="#{activeTaskController.pagination.hasNextPage}"/>&nbsp;
+                    <h:dataTable value="#{activeTaskController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Активные Здачи"/>
@@ -35,14 +35,14 @@
                             <h:outputText value="#{item.stausId.name}"/>
                         </h:column>
                         <h:column>
-                            <h:commandLink action="#{taskController.prepareView}" value="Подробнее"/>
+                            <h:commandLink action="#{activeTaskController.prepareView}" value="Подробнее"/>
                             <h:outputText value=" "/>
-                            <h:commandLink action="#{taskController.destroy}" value="Удалить"/>
+                            <h:commandLink action="#{activeTaskController.destroy}" value="Удалить"/>
                         </h:column>
                     </h:dataTable>
                 </h:panelGroup>
                 <br />
-                <h:commandLink action="#{taskController.prepareCreate}" value="Добаить задачу"/>
+                <h:commandLink action="#{activeTaskController.prepareCreate}" value="Добаить задачу"/>
 
                 <br />
                 <br />
