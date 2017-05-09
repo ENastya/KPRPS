@@ -29,7 +29,8 @@ public class TaskController implements Serializable {
     private sb.TaskFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-
+    private boolean active;
+    
     public TaskController() {
     }
 
@@ -49,16 +50,20 @@ public class TaskController implements Serializable {
         if (pagination == null) {
             pagination = new PaginationHelper(10) {
 
+                private List<Task> TaskList() {
+                    return getFacade().findTaskRange(2, isActive(), new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()});
+                }
+
                 @Override
                 public int getItemsCount() {
-                    return getFacade().count();
+                    return TaskList().size();
                 }
 
                 @Override
                 public DataModel createPageDataModel() {
-                    //return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
-                    
-                    return new ListDataModel(getFacade().getByUser(1));
+                    return new ListDataModel(TaskList());
+
+                    //return new ListDataModel(getFacade().getByUserActive(1, true));
                 }
             };
         }
@@ -66,8 +71,15 @@ public class TaskController implements Serializable {
     }
 
     public String prepareList() {
+        setActive(false);
         recreateModel();
         return "List";
+    }
+    
+    public String prepareActiveList(){ 
+        setActive(true);
+        recreateModel();
+        return "ActiveList";
     }
 
     public String prepareView() {
@@ -165,6 +177,7 @@ public class TaskController implements Serializable {
 
     private void recreateModel() {
         items = null;
+        //getItems();
     }
 
     private void recreatePagination() {
@@ -193,6 +206,20 @@ public class TaskController implements Serializable {
 
     public Task getTask(java.lang.Integer id) {
         return ejbFacade.find(id);
+    }
+
+    /**
+     * @return the active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @FacesConverter(forClass = Task.class)

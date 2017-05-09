@@ -28,9 +28,32 @@ public class TaskFacade extends AbstractFacade<Task> {
         return em;
     }
     
+    public List<Task> findTaskRange(int id, boolean active, int[] range) {
+        /*javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        cq.select(cq.from(entityClass));
+        javax.persistence.Query q = getEntityManager().createQuery(cq);*/
+        TypedQuery <Task> q;
+        
+        if (active) {
+            q = em.createNamedQuery("Task.findActive", Task.class).setParameter("userid", id);
+        } 
+        else {
+            q = em.createNamedQuery("Task.findByUser", Task.class).setParameter("userid", id);
+        }
+        q.setMaxResults(range[1] - range[0] + 1);
+        q.setFirstResult(range[0]);
+        return q.getResultList();
+    }
+    
     public TaskFacade() {
         super(Task.class);
     }
+    
+   /* public List getByUserActive () {
+        
+        return getByUser(id);
+    }
+    
     
     public List getByUser(int id){
         TypedQuery <Task> q = em.createNamedQuery("Task.findByUser", Task.class).setParameter("userid", id);
@@ -38,10 +61,10 @@ public class TaskFacade extends AbstractFacade<Task> {
         return q.getResultList();
     }
     
-     public List getByActive(){
-        TypedQuery <Task> q = em.createNamedQuery("Task.findActive", Task.class);
+     public List getByActive(int id){
+        TypedQuery <Task> q = em.createNamedQuery("Task.findActive", Task.class).setParameter("userid", id);
         List mylist = q.getResultList();
         return q.getResultList();
-    }
+    }*/
     
 }

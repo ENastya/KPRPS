@@ -7,7 +7,7 @@
     
     <ui:composition template="/template.xhtml">
         <ui:define name="title">
-            <h:outputText value="Мои Задачи"></h:outputText>
+            <h:outputText value="Активные Задачи"></h:outputText>
         </ui:define>
         <ui:define name="body">
 
@@ -24,7 +24,7 @@
                     <h:dataTable value="#{taskController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
                         <h:column>
                             <f:facet name="header">
-                                <h:outputText value="Мои Здачи"/>
+                                <h:outputText value="Активные Здачи"/>
                             </f:facet>
                             <h:outputText value="#{item.name}"/>
                         </h:column>
