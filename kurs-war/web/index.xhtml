@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/template.xhtml">
         <ui:define name="title">
             Добро пожаловать
@@ -50,9 +51,11 @@
                                             <li> <h:link outcome="/task/List" > <span class="cbp-ig-icon designmodo-location"></span>
                                                     <h3 class="cbp-ig-title">Задачи</h3>
                                                     <span class="cbp-ig-category">смотреть все</span> </h:link> </li>
-                                            <li>  <h:link outcome="/task/ActiveList" > <span class="cbp-ig-icon designmodo-settings"></span>
+                                            <li>  <h:link outcome="/task/List" > <span class="cbp-ig-icon designmodo-settings"></span>
                                                     <h3 class="cbp-ig-title">Активные задачи</h3>
-                                                    <span class="cbp-ig-category">смотреть все</span> </h:link> </li>
+                                                    <span class="cbp-ig-category">смотреть все</span>
+                                                    <f:param name="type" value="active" />
+                                                </h:link> </li>
                                             <li> <h:link outcome="/project/List" > <span class="cbp-ig-icon cesgra-globe"></span>
                                                     <h3 class="cbp-ig-title">Проекты</h3>
                                                     <span class="cbp-ig-category">смотреть все</span> </h:link> </li>

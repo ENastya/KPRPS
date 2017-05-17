@@ -7,6 +7,7 @@ import sb.TaskFacade;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -76,11 +77,11 @@ public class TaskController implements Serializable {
         return "List";
     }
     
-    public String prepareActiveList(){ 
+ /*   public String prepareActiveList(){ 
         setActive(true);
         recreateModel();
         return "ActiveList";
-    }
+    }*/
 
     public String prepareView() {
         current = (Task) getItems().getRowData();
@@ -169,9 +170,20 @@ public class TaskController implements Serializable {
     }
 
     public DataModel getItems() {
-        if (items == null) {
+        //if (items == null) {
+            
+            FacesContext fc = FacesContext.getCurrentInstance();
+            Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
+            String param = params.get("type1");
+            
+            if ("active".equals(param)) {
+                setActive(true);
+            } 
+            else { 
+                setActive(false);
+            }
             items = getPagination().createPageDataModel();
-        }
+       // }
         return items;
     }
 
@@ -213,6 +225,11 @@ public class TaskController implements Serializable {
      */
     public boolean isActive() {
         return active;
+    }
+    
+    public String activeString(){
+        if (active) return "active";
+        return "";
     }
 
     /**
