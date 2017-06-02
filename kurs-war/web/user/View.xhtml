@@ -78,7 +78,9 @@
                         </h:column>
                     </h:dataTable>
                 <br />
-                <h:link outcome="/index" value="На главную"/>
+                 <h:commandLink action="#{estimateController.LoadUserEst(userController.selected.id)}" value="Свести смету"/>
+               <br/>
+                 <h:link outcome="/index" value="На главную"/>
 
             </h:form>
         </ui:define>

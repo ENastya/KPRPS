@@ -6,6 +6,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,6 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,10 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p"),
-    
-    @NamedQuery(name = "Process.findByProject", query = "SELECT p FROM Process p WHERE p.taskId.projectId.id = :projid"),
-    @NamedQuery(name = "Process.findByUser", query = "SELECT p FROM Process p WHERE p.taskId.userId.id = :userid and p.taskId.userId.lastEstimate < p.eTime"),
-    
     @NamedQuery(name = "Project.findById", query = "SELECT p FROM Project p WHERE p.id = :id"),
     @NamedQuery(name = "Project.findByName", query = "SELECT p FROM Project p WHERE p.name = :name"),
     @NamedQuery(name = "Project.findByDescription", query = "SELECT p FROM Project p WHERE p.description = :description")})
@@ -61,6 +60,11 @@ public class Project implements Serializable {
     private List<Task> taskList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
     private List<Estimate> estimateList;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "LastEstimate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastEstimate;
 
     public Project() {
     }
@@ -140,6 +144,20 @@ public class Project implements Serializable {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    /**
+     * @return the lastEstimate
+     */
+    public Date getLastEstimate() {
+        return lastEstimate;
+    }
+
+    /**
+     * @param lastEstimate the lastEstimate to set
+     */
+    public void setLastEstimate(Date lastEstimate) {
+        this.lastEstimate = lastEstimate;
     }
     
 }

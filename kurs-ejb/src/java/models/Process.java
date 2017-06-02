@@ -32,6 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Process.findAll", query = "SELECT p FROM Process p"),
+    @NamedQuery(name = "Process.findByProject", query = "SELECT p FROM Process p WHERE p.taskId.projectId.id = :projid and p.taskId.projectId.lastEstimate < p.eTime"),
+    @NamedQuery(name = "Process.findByUser", query = "SELECT p FROM Process p WHERE p.taskId.userId.id = :userid and p.taskId.userId.lastEstimate < p.eTime"),
     @NamedQuery(name = "Process.findById", query = "SELECT p FROM Process p WHERE p.id = :id"),
     @NamedQuery(name = "Process.findByBTime", query = "SELECT p FROM Process p WHERE p.bTime = :bTime"),
     @NamedQuery(name = "Process.findByETime", query = "SELECT p FROM Process p WHERE p.eTime = :eTime"),

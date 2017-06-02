@@ -47,6 +47,11 @@ public class Estimate implements Serializable {
     @Column(name = "CDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date cDate;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "PreDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date preDate;
     @JoinColumn(name = "UserId", referencedColumnName = "Id")
     @ManyToOne(optional = false)
     private User userId;
@@ -121,6 +126,20 @@ public class Estimate implements Serializable {
     @Override
     public String toString() {
         return "models.Estimate[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the preDate
+     */
+    public Date getPreDate() {
+        return preDate;
+    }
+
+    /**
+     * @param preDate the preDate to set
+     */
+    public void setPreDate(Date preDate) {
+        this.preDate = preDate;
     }
     
 }

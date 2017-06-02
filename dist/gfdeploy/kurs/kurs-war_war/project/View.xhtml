@@ -62,6 +62,9 @@
                             </h:outputText>
                         </h:column>
                     </h:dataTable>
+                 <h:commandLink action="#{estimateController.LoadUserEst(projectController.selected.id)}" value="Свести смету"/>
+               <br/>
+                 <h:link outcome="/index" value="На главную"/>
             </h:form>
         </ui:define>
     </ui:composition>

@@ -61,7 +61,17 @@ public class EstimateController implements Serializable {
         }
         return pagination;
     }
-
+    
+    public String LoadUserEst(int userid){
+    ejbFacade.LoadUserEst(userid);
+    return "update";
+    }
+    
+    public String LoadProjEst(int projid){
+    ejbFacade.LoadProjEst(projid);
+    return "update";
+    }
+    
     public String prepareList() {
         recreateModel();
         return "List";

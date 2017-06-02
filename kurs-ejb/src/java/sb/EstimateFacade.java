@@ -5,10 +5,14 @@
  */
 package sb;
 
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import models.Estimate;
+import models.Project;
+import models.User;
 
 /**
  *
@@ -25,8 +29,34 @@ public class EstimateFacade extends AbstractFacade<Estimate> {
         return em;
     }
 
+    public void LoadUserEst(int userid) {
+        User user = em.find(User.class, userid);
+        Estimate est = new Estimate();
+        est.setPreDate(user.getLastEstimate());
+        long curTime = System.currentTimeMillis();
+        Date curDate = new Date(curTime);
+        est.setCDate(curDate);
+        est.setUserId(user);
+        em.persist(est);
+        user.setLastEstimate(curDate);
+        em.merge(user);
+    }
+    
+    public void LoadProjEst(int projid) {
+        Project proj = em.find(Project.class, projid);
+        Estimate est = new Estimate();
+        est.setPreDate(proj.getLastEstimate());
+        long curTime = System.currentTimeMillis();
+        Date curDate = new Date(curTime);
+        est.setCDate(curDate);
+        est.setProjectId(proj);
+        em.persist(est);
+        proj.setLastEstimate(curDate);
+        em.merge(proj);
+    }
+    
     public EstimateFacade() {
         super(Estimate.class);
     }
-    
+
 }
