@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Настя
+ * @author User
  */
 @Entity
 @Table(name = "status")

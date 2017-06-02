@@ -6,6 +6,8 @@ import jsf.util.PaginationHelper;
 import sb.ProcessFacade;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -17,6 +19,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import models.Task;
 
 @Named("processController")
 @SessionScoped
@@ -55,11 +58,27 @@ public class ProcessController implements Serializable {
 
                 @Override
                 public DataModel createPageDataModel() {
-                    return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
+                    return new ListDataModel(getFacade().userTaskByDate(2));
                 }
             };
         }
         return pagination;
+    }
+
+    public List<Process> findByProj(int id) {
+        return getFacade().procByProj(id);
+    }
+
+    public ListDataModel<Process> findByUser(int id) {
+        return new ListDataModel(getFacade().userTaskByDate(id));
+    }
+
+    public double fullTime(ListDataModel<Process> processes) {
+        long full = 0;
+        for (Process i : processes) {
+            full += i.getFullTime().getTime();
+        }
+        return full / 3600000;
     }
 
     public String prepareList() {
@@ -69,6 +88,7 @@ public class ProcessController implements Serializable {
 
     public String prepareView() {
         current = (Process) getItems().getRowData();
+        current.calculateFullTime();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
@@ -79,19 +99,39 @@ public class ProcessController implements Serializable {
         return "Create";
     }
 
-    public String create() {
+    public String create(Task task) {
         try {
-            getFacade().create(current);
+            //current = null;
+
+            Process newCurrent = new Process();
+
+            newCurrent.setTaskId(task);
+            long curTime = System.currentTimeMillis();
+            Date curDate = new Date(curTime);
+            newCurrent.setBTime(curDate);
+            newCurrent.calculateFullTime();
+
+            getFacade().create(newCurrent);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProcessCreated"));
-            return prepareCreate();
+
+            return startTask(newCurrent);
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
         }
     }
 
+    public String startTask(Process cur) {
+        current = cur;
+        //current.calculateFullTime();
+        //selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
+
+        return "Start";
+    }
+
     public String prepareEdit() {
         current = (Process) getItems().getRowData();
+        current.calculateFullTime();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }

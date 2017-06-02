@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Добавить"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Название" for="name" />
+                    <h:inputText id="name" value="#{taskController.selected.name}" title="Название" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_name}"/>
+                    <h:outputLabel value="Описание" for="description" />
+                    <h:inputText id="description" value="#{taskController.selected.description}" title="Пользователь" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_description}"/>
+                    <h:outputLabel value="Пльзователь" for="userId" />
+                    <h:selectOneMenu id="userId" value="#{taskController.selected.userId}" title="Пользователь" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_userId}">
+                        <f:selectItems value="#{userController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="Проект" for="projectId" />
+                    <h:selectOneMenu id="projectId" value="#{taskController.selected.projectId}" title="Проект" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_projectId}">
+                        <f:selectItems value="#{projectController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="Статус" for="stausId" />
+                    <h:selectOneMenu id="stausId" value="#{taskController.selected.stausId}" title="Статус" required="true" requiredMessage="#{bundle.CreateTaskRequiredMessage_stausId}">
+                        <f:selectItems value="#{statusController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{taskController.create}" value="Добавить" />
+                <br />
+                <br />
+                <h:commandLink action="#{taskController.prepareList}" value="Мои задачи" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="На главную"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

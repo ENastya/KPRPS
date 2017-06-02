@@ -63,18 +63,25 @@ public class Process implements Serializable {
     @ManyToOne(optional = false)
     private Task taskId;
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Ended")
+    private boolean Ended;
+
     public Process() {
+        this.Ended = false;
     }
 
     public Process(Integer id) {
         this.id = id;
     }
 
-    public Process(Integer id, Date bTime, Date eTime, Date fullTime) {
+    public Process(Integer id, Date bTime, Date eTime, Date fullTime, Boolean Ended) {
         this.id = id;
         this.bTime = bTime;
         this.eTime = eTime;
         this.fullTime = fullTime;
+        this.Ended = Ended;
     }
 
     public Integer getId() {
@@ -105,6 +112,22 @@ public class Process implements Serializable {
         return fullTime;
     }
 
+    public void calculateFullTime() {
+        if (!Ended) {
+            long curTime = System.currentTimeMillis();
+            Date curDate = new Date(curTime);
+            this.eTime = curDate;
+        }
+        Date newFullTime = new Date(eTime.getTime() - bTime.getTime());
+        setFullTime(newFullTime);
+    }
+
+    public String fullTimeToString(){
+        long time = fullTime.getTime();
+        String res = String.format("%02d:%02d:%02d", time / 1000 / 3600, time / 1000 / 60 % 60, time / 1000 % 60);
+        return res;
+    }
+    
     public void setFullTime(Date fullTime) {
         this.fullTime = fullTime;
     }
@@ -141,5 +164,19 @@ public class Process implements Serializable {
     public String toString() {
         return "models.Process[ id=" + id + " ]";
     }
-    
+
+    /**
+     * @return the Ended
+     */
+    public boolean isEnded() {
+        return Ended;
+    }
+
+    /**
+     * @param Ended the Ended to set
+     */
+    public void setEnded(boolean Ended) {
+        this.Ended = Ended;
+    }
+
 }

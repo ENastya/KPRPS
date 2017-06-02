@@ -26,11 +26,12 @@ public class TaskController implements Serializable {
 
     private Task current;
     private DataModel items = null;
+    private DataModel itemsActive = null;
     @EJB
     private sb.TaskFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-    private boolean active;
+    private boolean active = true;
     
     public TaskController() {
     }
@@ -52,7 +53,7 @@ public class TaskController implements Serializable {
             pagination = new PaginationHelper(10) {
 
                 private List<Task> TaskList() {
-                    return getFacade().findTaskRange(2, isActive(), new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()});
+                    return getFacade().findTaskRange(2, new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()});
                 }
 
                 @Override
@@ -170,20 +171,20 @@ public class TaskController implements Serializable {
     }
 
     public DataModel getItems() {
-        //if (items == null) {
+        if (items == null) {
             
-            FacesContext fc = FacesContext.getCurrentInstance();
+            /*FacesContext fc = FacesContext.getCurrentInstance();
             Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
-            String param = params.get("type1");
+            String param = params.get("type");
             
             if ("active".equals(param)) {
                 setActive(true);
             } 
             else { 
                 setActive(false);
-            }
+            }*/
             items = getPagination().createPageDataModel();
-       // }
+        }
         return items;
     }
 
@@ -199,13 +200,17 @@ public class TaskController implements Serializable {
     public String next() {
         getPagination().nextPage();
         recreateModel();
-        return "List";
+        
+        //FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("type", "active");
+        return "taskList";
     }
 
     public String previous() {
         getPagination().previousPage();
         recreateModel();
-        return "List";
+        //FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("type", "active");
+
+        return "taskList";
     }
 
     public SelectItem[] getItemsAvailableSelectMany() {
@@ -237,6 +242,23 @@ public class TaskController implements Serializable {
      */
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    /**
+     * @return the itemsActive
+     */
+    public DataModel getItemsActive() {
+        if (itemsActive == null) {
+            itemsActive = new ListDataModel(getFacade().findActive(2));
+        }
+        return itemsActive;
+    }
+
+    /**
+     * @param itemsActive the itemsActive to set
+     */
+    public void setItemsActive(DataModel itemsActive) {
+        this.itemsActive = itemsActive;
     }
 
     @FacesConverter(forClass = Task.class)

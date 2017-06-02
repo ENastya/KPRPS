@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Настя
+ * @author User
  */
 @Entity
 @Table(name = "task")
@@ -57,8 +57,10 @@ public class Task implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "Name")
     private String name;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "taskId")
     private List<Process> processList;
+    
     @JoinColumn(name = "UserId", referencedColumnName = "Id")
     @ManyToOne(optional = false)
     private User userId;

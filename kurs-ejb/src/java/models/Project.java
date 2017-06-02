@@ -25,13 +25,17 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Настя
+ * @author User
  */
 @Entity
 @Table(name = "project")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p"),
+    
+    @NamedQuery(name = "Process.findByProject", query = "SELECT p FROM Process p WHERE p.taskId.projectId.id = :projid"),
+    @NamedQuery(name = "Process.findByUser", query = "SELECT p FROM Process p WHERE p.taskId.userId.id = :userid and p.taskId.userId.lastEstimate < p.eTime"),
+    
     @NamedQuery(name = "Project.findById", query = "SELECT p FROM Project p WHERE p.id = :id"),
     @NamedQuery(name = "Project.findByName", query = "SELECT p FROM Project p WHERE p.name = :name"),
     @NamedQuery(name = "Project.findByDescription", query = "SELECT p FROM Project p WHERE p.description = :description")})
