@@ -29,6 +29,10 @@ public class ProcessController implements Serializable {
     private DataModel items = null;
     @EJB
     private sb.ProcessFacade ejbFacade;
+    
+    @EJB
+    private sb.TaskFacade taskFacade;
+    
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
@@ -64,21 +68,25 @@ public class ProcessController implements Serializable {
         }
         return pagination;
     }
-
-    public List<Process> findByProj(int id) {
-        return getFacade().procByProj(id);
+    
+    public ListDataModel<Process> findByProj(int id) {
+        return new ListDataModel(getFacade().procByProj(id));
+    }
+    
+    public ListDataModel<Process> findByTask(int id) {
+        return new ListDataModel(getFacade().findEndedProcess(id));
     }
 
     public ListDataModel<Process> findByUser(int id) {
         return new ListDataModel(getFacade().userTaskByDate(id));
     }
 
-    public double fullTime(ListDataModel<Process> processes) {
+    public String fullTime(ListDataModel<Process> processes) {
         long full = 0;
         for (Process i : processes) {
             full += i.getFullTime().getTime();
         }
-        return full / 3600000;
+        return String.format("%02d:%02d:%02d", full / 1000 / 3600, full / 1000 / 60 % 60, full / 1000 % 60);
     }
 
     public String prepareList() {
@@ -102,18 +110,25 @@ public class ProcessController implements Serializable {
     public String create(Task task) {
         try {
             //current = null;
-
-            Process newCurrent = new Process();
-
-            newCurrent.setTaskId(task);
-            long curTime = System.currentTimeMillis();
-            Date curDate = new Date(curTime);
-            newCurrent.setBTime(curDate);
-            newCurrent.calculateFullTime();
-
-            getFacade().create(newCurrent);
+            
+            getTaskFacade().editStatus(task, 2);
+            
+            Process newCurrent = getFacade().findActiveProcess(task.getId());
+            
+            if (newCurrent == null) {
+                newCurrent = new Process();
+                newCurrent.setTaskId(task);
+                long curTime = System.currentTimeMillis();
+                Date curDate = new Date(curTime);
+                newCurrent.setBTime(curDate);
+                newCurrent.calculateFullTime();
+                getFacade().create(newCurrent);
+            }
+            
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProcessCreated"));
-
+            
+            
+            
             return startTask(newCurrent);
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -121,6 +136,10 @@ public class ProcessController implements Serializable {
         }
     }
 
+    public boolean mayStart(int id){
+        return getFacade().findUserActiveProcess(id) == null;
+    }
+    
     public String startTask(Process cur) {
         current = cur;
         //current.calculateFullTime();
@@ -128,6 +147,7 @@ public class ProcessController implements Serializable {
 
         return "Start";
     }
+    
 
     public String prepareEdit() {
         current = (Process) getItems().getRowData();
@@ -230,6 +250,20 @@ public class ProcessController implements Serializable {
 
     public Process getProcess(java.lang.Integer id) {
         return ejbFacade.find(id);
+    }
+
+    /**
+     * @return the taskFacade
+     */
+    public sb.TaskFacade getTaskFacade() {
+        return taskFacade;
+    }
+
+    /**
+     * @param taskFacade the taskFacade to set
+     */
+    public void setTaskFacade(sb.TaskFacade taskFacade) {
+        this.taskFacade = taskFacade;
     }
 
     @FacesConverter(forClass = Process.class)

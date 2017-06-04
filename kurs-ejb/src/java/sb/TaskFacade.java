@@ -11,6 +11,7 @@ import javax.faces.model.ListDataModel;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import models.Status;
 import models.Task;
 
 /**
@@ -49,6 +50,12 @@ public class TaskFacade extends AbstractFacade<Task> {
         TypedQuery <Task> q;
         q = em.createNamedQuery("Task.findActive", Task.class).setParameter("userid", id);
         return q.getResultList();
+    }
+    
+    public void editStatus(Task task, int statusId){
+        Status status = em.find(Status.class, statusId);
+        task.setStausId(status);
+        em.merge(task);
     }
     
     public TaskFacade() {

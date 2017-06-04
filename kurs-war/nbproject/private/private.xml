@@ -5,6 +5,7 @@
         <group>
             <file>file:/C:/Users/Настя/Desktop/kurs/kurs-war/web/WEB-INF/faces-config.xml</file>
             <file>file:/C:/Users/Настя/Desktop/kurs/kurs-war/web/user/List.xhtml</file>
+            <file>file:/C:/Users/Настя/Desktop/kurs/kurs-war/web/project/View.xhtml</file>
             <file>file:/C:/Users/Настя/Desktop/kurs/kurs-war/src/java/jsf/EstimateController.java</file>
             <file>file:/C:/Users/Настя/Desktop/kurs/kurs-war/web/user/View.xhtml</file>
         </group>

@@ -39,8 +39,50 @@ public class ProcessFacade extends AbstractFacade<Process> {
        return q.getResultList();
     }
       
+      public List<Process> findEndedProcess(int id){
+          TypedQuery <Process> q;
+          q = em.createNamedQuery("Process.findByTask", Process.class).setParameter("id", id).setParameter("ended", true);
+          return q.getResultList();
+      }
+      
+      public Process findActiveProcess(int id){
+          TypedQuery <Process> q;
+          q = em.createNamedQuery("Process.findByTask", Process.class).setParameter("id", id).setParameter("ended", false);
+          
+          Process res = null;
+          try {
+              res = q.getSingleResult();
+          }
+          catch(Exception e){
+              
+          }
+          return res;
+      }
+      
+      public void closeActiveProcess(int id){
+          TypedQuery <Process> q;
+          q = em.createNamedQuery("Process.findByTask", Process.class).setParameter("id", id).setParameter("ended", false);
+          List<Process> activeList = q.getResultList();
+          for (Process item: activeList){
+              item.setEnded(true);
+              em.merge(item);
+          }
+      }
+      
     public ProcessFacade() {
         super(Process.class);
     }
     
+    public Process findUserActiveProcess(int id){
+          TypedQuery <Process> q;
+          q = em.createNamedQuery("Process.findByUserActive", Process.class).setParameter("id", id).setParameter("ended", false);
+          Process res = null;
+          try {
+              res = q.getSingleResult();
+          }
+          catch(Exception e){
+              
+          }
+          return res;
+      }
 }

@@ -19,6 +19,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import models.Status;
 
 @Named("taskController")
 @SessionScoped
@@ -29,6 +30,11 @@ public class TaskController implements Serializable {
     private DataModel itemsActive = null;
     @EJB
     private sb.TaskFacade ejbFacade;
+    
+    
+    @EJB
+    private sb.ProcessFacade processFacade;
+    
     private PaginationHelper pagination;
     private int selectedItemIndex;
     private boolean active = true;
@@ -88,6 +94,20 @@ public class TaskController implements Serializable {
         current = (Task) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
+    }
+    
+    public String pauseTask(models.Process cur){
+        cur.calculateFullTime();
+        cur.setEnded(true);
+        getProcessFacade().edit(cur);
+        Task task = cur.getTaskId();
+        getFacade().editStatus(task, 4);
+        return preparePauseView(task);
+    }
+    
+    public String preparePauseView(Task task){
+        current = task;
+        return "TaskView";
     }
 
     public String prepareCreate() {
@@ -259,6 +279,17 @@ public class TaskController implements Serializable {
      */
     public void setItemsActive(DataModel itemsActive) {
         this.itemsActive = itemsActive;
+    }
+
+    /**
+     * @return the statusFacade
+     */
+
+    /**
+     * @return the processFacade
+     */
+    public sb.ProcessFacade getProcessFacade() {
+        return processFacade;
     }
 
     @FacesConverter(forClass = Task.class)

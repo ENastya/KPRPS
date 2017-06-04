@@ -1,5 +1,5 @@
-function startTimer() {
-    var my_timer = document.getElementById("j_idt12:my_timer");
+function startTimer(id) {
+    var my_timer = document.getElementById("j_idt13:my_timer");
     var time = my_timer.innerHTML;
     var arr = time.split(":");
     var h = arr[0];
@@ -26,7 +26,7 @@ function startTimer() {
     }
     else s++;
     if (s < 10) s = "0" + s;
-    document.getElementById("j_idt12:my_timer").innerHTML = h+":"+m+":"+s;
+    document.getElementById("j_idt13:my_timer").innerHTML = h+":"+m+":"+s;
     setTimeout(startTimer, 1000); 
     
   }

@@ -5,8 +5,12 @@
         <group>
             <file>file:/C:/Users/Настя/Desktop/kurs/kurs-ejb/src/conf/persistence.xml</file>
             <file>file:/C:/Users/Настя/Desktop/kurs/kurs-ejb/src/java/models/Process.java</file>
+            <file>file:/C:/Users/Настя/Desktop/kurs/kurs-ejb/src/java/models/User.java</file>
             <file>file:/C:/Users/Настя/Desktop/kurs/kurs-ejb/src/java/models/Estimate.java</file>
+            <file>file:/C:/Users/Настя/Desktop/kurs/kurs-ejb/src/java/models/Status.java</file>
             <file>file:/C:/Users/Настя/Desktop/kurs/kurs-ejb/src/java/sb/ProcessFacade.java</file>
+            <file>file:/C:/Users/Настя/Desktop/kurs/kurs-ejb/src/java/models/Project.java</file>
+            <file>file:/C:/Users/Настя/Desktop/kurs/kurs-ejb/src/java/models/Task.java</file>
             <file>file:/C:/Users/Настя/Desktop/kurs/kurs-ejb/src/java/sb/EstimateFacade.java</file>
         </group>
     </open-files>

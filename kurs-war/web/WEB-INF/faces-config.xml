@@ -35,6 +35,7 @@
         <navigation-case>
             <from-outcome>update</from-outcome>
             <to-view-id>/user/View.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
@@ -42,6 +43,23 @@
         <navigation-case>
             <from-outcome>update</from-outcome>
             <to-view-id>/project/View.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/task/ActiveList.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>Start</from-outcome>
+            <to-view-id>/process/View.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/process/View.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>TaskView</from-outcome>
+            <to-view-id>/task/View.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 </faces-config>
