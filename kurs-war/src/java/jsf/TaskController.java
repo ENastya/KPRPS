@@ -6,9 +6,12 @@ import jsf.util.PaginationHelper;
 import sb.TaskFacade;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -31,6 +34,8 @@ public class TaskController implements Serializable {
     @EJB
     private sb.TaskFacade ejbFacade;
     
+    @EJB
+    private redmine.AccessRM arm;
     
     @EJB
     private sb.ProcessFacade processFacade;
@@ -58,8 +63,13 @@ public class TaskController implements Serializable {
         if (pagination == null) {
             pagination = new PaginationHelper(10) {
 
-                private List<Task> TaskList() {
-                    return getFacade().findTaskRange(2, new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()});
+                private List<Task> TaskList() {                    
+                    try {
+                        getArm().ParseXMLtoTask();
+                    } catch (UnsupportedEncodingException ex) {
+                        Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    return getFacade().findTaskRange(1, new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()});
                 }
 
                 @Override
@@ -192,17 +202,7 @@ public class TaskController implements Serializable {
 
     public DataModel getItems() {
         if (items == null) {
-            
-            /*FacesContext fc = FacesContext.getCurrentInstance();
-            Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
-            String param = params.get("type");
-            
-            if ("active".equals(param)) {
-                setActive(true);
-            } 
-            else { 
-                setActive(false);
-            }*/
+            recreateModel();
             items = getPagination().createPageDataModel();
         }
         return items;
@@ -290,6 +290,13 @@ public class TaskController implements Serializable {
      */
     public sb.ProcessFacade getProcessFacade() {
         return processFacade;
+    }
+
+    /**
+     * @return the arm
+     */
+    private redmine.AccessRM getArm() {
+        return arm;
     }
 
     @FacesConverter(forClass = Task.class)
