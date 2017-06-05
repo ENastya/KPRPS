@@ -6,7 +6,10 @@ import jsf.util.PaginationHelper;
 import sb.ProjectFacade;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -17,6 +20,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import redmine.AccessRM;
 
 @Named("projectController")
 @SessionScoped
@@ -26,6 +30,8 @@ public class ProjectController implements Serializable {
     private DataModel items = null;
     @EJB
     private sb.ProjectFacade ejbFacade;
+    @EJB
+    private AccessRM arm;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
@@ -47,6 +53,8 @@ public class ProjectController implements Serializable {
     public PaginationHelper getPagination() {
         if (pagination == null) {
             pagination = new PaginationHelper(10) {
+                
+                
 
                 @Override
                 public int getItemsCount() {
@@ -55,6 +63,11 @@ public class ProjectController implements Serializable {
 
                 @Override
                 public DataModel createPageDataModel() {
+                    try {
+                        getArm().ParseXMLtoProject();
+                    } catch (UnsupportedEncodingException ex) {
+                        Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                 }
             };
@@ -154,6 +167,7 @@ public class ProjectController implements Serializable {
     }
 
     public DataModel getItems() {
+        recreateModel();
         if (items == null) {
             items = getPagination().createPageDataModel();
         }
@@ -190,6 +204,13 @@ public class ProjectController implements Serializable {
 
     public Project getProject(java.lang.Integer id) {
         return ejbFacade.find(id);
+    }
+
+    /**
+     * @return the arm
+     */
+    public AccessRM getArm() {
+        return arm;
     }
 
     @FacesConverter(forClass = Project.class)

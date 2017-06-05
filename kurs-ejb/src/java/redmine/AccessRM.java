@@ -31,6 +31,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
+import java.util.Date;
 
 /**
  *
@@ -39,25 +41,24 @@ import org.xml.sax.SAXException;
 @Stateless
 @LocalBean
 
-
 public class AccessRM {
 
     @PersistenceContext(unitName = "kurs-ejbPU")
     private EntityManager em;
-    
-    public NodeList getIdFromXML(String xml, String split){
+
+    public NodeList getIdFromXML(String xml, String split) {
         //"author id=\""
-    NodeList s = split(xml, split);
-            for (int i = 1; i < s.getLength(); i++) {
-                    String k = s.item(i).getTextContent();
+        NodeList s = split(xml, split);
+        for (int i = 1; i < s.getLength(); i++) {
+            String k = s.item(i).getTextContent();
             s.item(i).setTextContent(k.substring(0, k.indexOf('"')));
-            }
-    return s;
+        }
+        return s;
     }
 
-    public void ParseXMLtoTask() throws UnsupportedEncodingException{
+    public void ParseXMLtoTask() throws UnsupportedEncodingException {
         String xmlresp = ReqRM("GET /redmine/issues.xml");
-        String xml = new String(xmlresp.getBytes("windows-1251"),StandardCharsets.UTF_8);
+        String xml = new String(xmlresp.getBytes("windows-1251"), StandardCharsets.UTF_8);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         InputSource is;
@@ -73,25 +74,73 @@ public class AccessRM {
             NodeList listProjId = getIdFromXML(xml, "project id=\"");
             //List <Task> tasks;
             int a = listId.getLength();
-            for (int i = 0; i< a;i++){
-            Task task = new Task();
-            task.setId(Integer.parseInt(listId.item(i).getTextContent()));
-            int id = Integer.parseInt(listUserId.item(i+1).getTextContent());
-            task.setUserId(em.find(User.class, id));
-            id = Integer.parseInt(listProjId.item(i+1).getTextContent());
-            task.setProjectId(em.find(Project.class, id));
-            task.setName(listSub.item(i).getTextContent());
-            if ("".equals(listDesc.item(i).getTextContent())) listDesc.item(i).setTextContent("Описание отсутствует");
-            task.setDescription(listDesc.item(i).getTextContent());
-            task.setStausId(em.find(Status.class, 1));
-            em.merge(task);
+            for (int i = 0; i < a; i++) {
+                Task task = new Task();
+                task.setId(Integer.parseInt(listId.item(i).getTextContent()));
+                int id = Integer.parseInt(listUserId.item(i + 1).getTextContent());
+                task.setUserId(em.find(User.class, id));
+                id = Integer.parseInt(listProjId.item(i + 1).getTextContent());
+                task.setProjectId(em.find(Project.class, id));
+                task.setName(listSub.item(i).getTextContent());
+                if ("".equals(listDesc.item(i).getTextContent())) {
+                    listDesc.item(i).setTextContent("Описание отсутствует");
+                }
+                task.setDescription(listDesc.item(i).getTextContent());
+
+                if (em.find(Task.class, task.getId()) == null) {
+                    task.setStausId(em.find(Status.class, 1));
+                } else {
+                    task.setStausId(em.find(Task.class, task.getId()).getStausId());
+                }
+
+                em.merge(task);
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            System.out.println("Я не хочу работать, иди спать");        }
+            System.out.println("Я не хочу работать, иди спать");
+        }
     }
-    
-    public String ReqRM(String req){
-    try {
+
+    public void ParseXMLtoProject() throws UnsupportedEncodingException {
+        String xmlresp = ReqRM("GET /redmine/projects.xml");
+        String xml = new String(xmlresp.getBytes("windows-1251"), StandardCharsets.UTF_8);
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        InputSource is;
+        try {
+            builder = factory.newDocumentBuilder();
+            is = new InputSource(new StringReader(xml));
+            Document doc;
+            doc = builder.parse(is);
+            NodeList listSub = doc.getElementsByTagName("name");
+            NodeList listDesc = doc.getElementsByTagName("description");
+            NodeList listId = doc.getElementsByTagName("id");
+            int a = listId.getLength();
+            for (int i = 0; i < a; i++) {
+                Project proj = new Project();
+                proj.setId(Integer.parseInt(listId.item(i).getTextContent()));
+                proj.setName(listSub.item(i).getTextContent());
+                if ("".equals(listDesc.item(i).getTextContent())) {
+                    listDesc.item(i).setTextContent("Описание отсутствует");
+                }
+                proj.setDescription(listDesc.item(i).getTextContent());
+
+                if (em.find(Project.class, proj.getId()) == null) {
+                    long curTime = System.currentTimeMillis();
+                    Date curDate = new Date(curTime);
+                    proj.setLastEstimate(curDate);
+                } else {
+                    proj.setLastEstimate(em.find(Project.class, proj.getId()).getLastEstimate());
+                }
+
+                em.merge(proj);
+            }
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            System.out.println("И я не хочу работать, иди спать");
+        }
+    }
+
+    public String ReqRM(String req) {
+        try {
 
             Socket clientSocket = null;
 
@@ -105,26 +154,25 @@ public class AccessRM {
             String fuser, fserver;
 
             out = new PrintWriter(clientSocket.getOutputStream(), true);
-            
+
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             fuser = req;
-                out.println(fuser);
-                fserver = in.readLine();
-                System.out.println(fserver);
+            out.println(fuser);
+            fserver = in.readLine();
+            System.out.println(fserver);
             out.close();
             in.close();
             inu.close();
             clientSocket.close();
-    return fserver;
+            return fserver;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    return null;
+        return null;
     }
 
     public void persist(Object object) {
         em.persist(object);
     }
-
 
 }

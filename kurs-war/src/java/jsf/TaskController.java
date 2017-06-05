@@ -65,6 +65,7 @@ public class TaskController implements Serializable {
 
                 private List<Task> TaskList() {                    
                     try {
+                        getArm().ParseXMLtoProject();
                         getArm().ParseXMLtoTask();
                     } catch (UnsupportedEncodingException ex) {
                         Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
@@ -201,8 +202,8 @@ public class TaskController implements Serializable {
     }
 
     public DataModel getItems() {
-        if (items == null) {
-            recreateModel();
+        recreateModel();
+        if (items == null) {            
             items = getPagination().createPageDataModel();
         }
         return items;
