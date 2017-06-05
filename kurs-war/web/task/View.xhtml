@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Задача"/>
+            <br/>
+            <h:outputText value="#{taskController.selected.name}"/>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h3>
+                <h:outputText value="Общее время: "/>
+                <h:outputText value="#{processController.fullTime(processController.findByTask(taskController.selected.id))}"/>
+                
+                </h3>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{taskController.selected.description}"/>
+                    <h:outputText value="Проект"/>
+                    <h:outputText value="#{taskController.selected.projectId.name}"/>
+                    <h:outputText value="#{taskController.selected.stausId.name}"/>
+                    <h:outputText value="#{taskController.selected.userId.id}" />
+
+                </h:panelGrid>
+                <c:set var="status" value="${taskController.selected.stausId.name}" />
+                <c:if test="${status eq 'активная'}">
+                    <c:if test="${processController.mayStart(taskController.selected.userId.id)}">
+                        <h:commandLink action="#{processController.create(taskController.selected)}" value="Начать выполнение" />
+                    </c:if>
+                </c:if>
+
+                <br />
+                <input type="button" value="Back" onclick="javascript:history.go(-1)"/>
+                <h:commandLink action="#{taskController.prepareList}" value="Мои задачи"/>
+                <br />
+                <h:link outcome="/index" value="На главную"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title><ui:insert name="title">Заголовок по умолчанию</ui:insert></title>
+        <link rel="stylesheet" type="text/css" href="#{resource['css/bootstrap.min.css']}"/>
+        <link rel="stylesheet" type="text/css" href="#{resource['css/custom.css']}"/>
+        <link rel="stylesheet" type="text/css" href="#{resource['font-awesome/css/font-awesome.min.css']}"/>
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['img/favicon.ico']}"/>
+
+        <ui:insert name="scripts">
+            
+        </ui:insert>
+    </h:head>
+
+    <h:body>
+   
+        <div class="navbar navbar-default navbar-fixed-top" id="ha-header">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                    <a class="navbar-brand logo" href="#{request.contextPath}">Project name</a> </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#{request.contextPath}">главная</a></li>
+                        <li><a href="#projects">проекты</a></li>
+                        <li><a href="#contact">контакты</a></li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse --> 
+            </div>
+        </div>
+
+
+
+        <div id="top" class="header">
+            <div class="flexslider">
+                <ul class="slides">
+                    <ui:insert name="slider" >
+                        <li><img src="#{resource['img/slider/11.jpg']}" alt="slider" />
+                            <p class="flex-caption">.</p>
+                        </li>
+                    </ui:insert>
+                </ul>
+            </div>
+        </div>
+
+        <ui:insert name="body" >Default Body</ui:insert>
+
+
+
+
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-9 col-sm-12">
+                        <p>Copyright &copy; 2017 D. A. Inside. Все права защищены.</p>
+                    </div>
+                    <div class="col-xs-12 col-md-3 col-sm-12">
+                        <ul class=" footer_social clearfix">
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                            <li class="go_top"><a href="#top"><i class="fa fa-chevron-circle-up"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- JavaScript --> 
+        <script type="text/javascript" src="#{resource['js/jquery.min.js']}"></script> 
+        <script type="text/javascript" src="#{resource['js/bootstrap.min.js']}"></script> 
+        <script type="text/javascript" src="#{resource['js/nicescroll.min.js']}"></script><!-- jquery nice scroll--> 
+        <script type="text/javascript" src="#{resource['js/pace.min.js']}" ></script> <!--page load progress bar--> 
+        <script type="text/javascript" src="#{resource['js/jquery.validate.min.js']}"></script><!--contact page--> 
+
+
+        <script type="text/javascript" src="#{resource['js/isotope.min.js']}"></script><!--Portfolio Filter--> 
+        <script type="text/javascript" src="#{resource['js/flexslider.min.js']}"></script><!-- FlexSlider --> 
+        <script type="text/javascript" src="#{resource['js/waypoints.min.js']}"></script><!--Header Effect--> 
+        <script type="text/javascript" src="#{resource['js/custom_min.js']}"></script><!-- Custom JavaScript  -->
+    </h:body>
+
+</html>
