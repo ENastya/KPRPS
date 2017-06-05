@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -53,8 +55,9 @@ public class AccessRM {
     return s;
     }
 
-    public void ParseXMLtoTask(){
-        String xml = ReqRM("GET /redmine/issues.xml");
+    public void ParseXMLtoTask() throws UnsupportedEncodingException{
+        String xmlresp = ReqRM("GET /redmine/issues.xml");
+        String xml = new String(xmlresp.getBytes("windows-1251"),StandardCharsets.UTF_8);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         InputSource is;
@@ -78,13 +81,13 @@ public class AccessRM {
             id = Integer.parseInt(listProjId.item(i+1).getTextContent());
             task.setProjectId(em.find(Project.class, id));
             task.setName(listSub.item(i).getTextContent());
+            if ("".equals(listDesc.item(i).getTextContent())) listDesc.item(i).setTextContent("Описание отсутствует");
             task.setDescription(listDesc.item(i).getTextContent());
             task.setStausId(em.find(Status.class, 1));
             em.merge(task);
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            System.out.println("Я не хочу работать, иди спать");
-        }
+            System.out.println("Я не хочу работать, иди спать");        }
     }
     
     public String ReqRM(String req){
@@ -101,8 +104,7 @@ public class AccessRM {
 
             String fuser, fserver;
 
-            out = new PrintWriter(clientSocket.getOutputStream(),
-                    true);
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
             
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             fuser = req;
