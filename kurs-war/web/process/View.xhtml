@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewProcessTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="scripts">
+            <script type="text/javascript" src="#{resource['js/timeer.js']}"/>
+            <script type="text/javascript">
+                document.addEventListener("DOMContentLoaded", startTimer);
+            </script>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:outputLabel value="#{processController.selected.calculateFullTime()}"/>
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="Задача"/>
+                    <h:outputText value="#{processController.selected.taskId.name}" title="#{bundle.ViewProcessTitle_taskId}"/>
+                    <h:outputText value="Описание"/>
+                    <h:outputText value="#{processController.selected.taskId.description}" title="#{bundle.ViewProcessTitle_taskId}"/>
+                    <h:outputText value="Дата начала"/>
+                    <h:outputText value="#{processController.selected.BTime}" title="#{bundle.ViewProcessTitle_BTime}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" timeZone="Europe/Moscow" />
+                    </h:outputText>
+                    <h:outputText value="полное время" />
+                    <h:outputLabel id="my_timer" value="#{processController.selected.fullTimeToString()}"/>
+
+                </h:panelGrid>
+                <c:if test="${!(processController.selected.ended)}">
+                    <h:commandLink action="#{taskController.pauseTask(processController.selected)}" value="Приостановить" />
+                </c:if>
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewProcessIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
