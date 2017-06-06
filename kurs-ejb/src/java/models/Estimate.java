@@ -141,5 +141,5 @@ public class Estimate implements Serializable {
     public void setPreDate(Date preDate) {
         this.preDate = preDate;
     }
-    
+
 }

@@ -8,6 +8,7 @@ package sb;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import models.User;
 
 /**
@@ -25,8 +26,21 @@ public class UserFacade extends AbstractFacade<User> {
         return em;
     }
 
+    public Boolean existMail(String mail) {
+        TypedQuery<User> q = em.createNamedQuery("User.findByEmail", User.class).setParameter("email", mail);
+        if (q.getSingleResult() == null) {
+            return false;
+        }
+        return true;
+    }
+
+    public User findByMail(String mail) {
+        TypedQuery<User> q = em.createNamedQuery("User.findByEmail", User.class).setParameter("email", mail);
+        return q.getSingleResult();
+    }
+
     public UserFacade() {
         super(User.class);
     }
-    
+
 }

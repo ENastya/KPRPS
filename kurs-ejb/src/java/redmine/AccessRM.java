@@ -33,6 +33,19 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
 import java.util.Date;
+import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
+import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
+import static java.lang.Math.random;
+import static java.lang.StrictMath.random;
+import java.util.Properties;
+import java.util.Random;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -45,6 +58,8 @@ public class AccessRM {
 
     @PersistenceContext(unitName = "kurs-ejbPU")
     private EntityManager em;
+
+    private Session session;
 
     public NodeList getIdFromXML(String xml, String split) {
         //"author id=\""
@@ -139,6 +154,52 @@ public class AccessRM {
         }
     }
 
+    public void ParseXMLtoUser() throws UnsupportedEncodingException {
+        String xmlresp = ReqRM("GET /redmine/users.xml?key=61c136acf0ac0ed07be22747015e5e843e77e9bc");
+        String xml = new String(xmlresp.getBytes("windows-1251"), StandardCharsets.UTF_8);
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        InputSource is;
+        try {
+            builder = factory.newDocumentBuilder();
+            is = new InputSource(new StringReader(xml));
+            Document doc;
+            doc = builder.parse(is);
+            NodeList listFN = doc.getElementsByTagName("firstname");
+            NodeList listLN = doc.getElementsByTagName("lastname");
+            NodeList listMail = doc.getElementsByTagName("mail");
+            NodeList listId = doc.getElementsByTagName("id");
+            int a = listId.getLength();
+            for (int i = 0; i < a; i++) {
+                User user = new User();
+                user.setId(Integer.parseInt(listId.item(i).getTextContent()));
+                user.setFio(listFN.item(i).getTextContent() + " " + listLN.item(i).getTextContent());
+                user.setEmail(listMail.item(i).getTextContent());
+                if (em.find(Project.class, user.getId()) == null) {
+                    user.setRole("guest");
+                    String symbols = "abcdfjhijklmnopqrstuvwxyz123456789";
+                    StringBuilder randString = new StringBuilder();
+                    int count = (int) (Math.random() * 30);
+                    for (int j = 0; j < 10; j++) {
+                        randString.append(symbols.charAt((int) (Math.random() * symbols.length())));
+                    }
+                    user.setPassword(randString.toString());
+                    long curTime = System.currentTimeMillis();
+                    Date curDate = new Date(curTime);
+                    user.setLastEstimate(curDate);
+                } else {
+                    user.setPassword(em.find(User.class, user.getId()).getPassword());
+                    user.setRole(em.find(User.class, user.getId()).getRole());
+                    user.setLastEstimate(em.find(User.class, user.getId()).getLastEstimate());
+                }
+
+                em.merge(user);
+            }
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            System.out.println("И я не хочу работать, иди спать");
+        }
+    }
+
     public String ReqRM(String req) {
         try {
 
@@ -169,6 +230,33 @@ public class AccessRM {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    public void sendPass(String email, String pass) {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+        session = Session.getInstance(props, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("timetrackingkurs@gmail.com", "passwordkurs");
+            }
+        }
+        );
+        //https://myaccount.google.com/lesssecureapps?rfn=27&rfnc=1&eid=4448369424949745717&et=1&asae=2&pli=1
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("timetrackingkurs@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject("Пароль доступа к системе учета времени ");
+            message.setText("Ваш пароль: " + pass);
+            Transport.send(message);
+            JOptionPane.showMessageDialog(null, "сообщение отправлено!");
+        } catch (Exception e) {
+            System.out.print(e);
+        }
     }
 
     public void persist(Object object) {

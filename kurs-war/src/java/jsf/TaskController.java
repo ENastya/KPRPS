@@ -33,17 +33,19 @@ public class TaskController implements Serializable {
     private DataModel itemsActive = null;
     @EJB
     private sb.TaskFacade ejbFacade;
-    
+
     @EJB
     private redmine.AccessRM arm;
     
+    private CurrentUser cu;
+
     @EJB
     private sb.ProcessFacade processFacade;
-    
+
     private PaginationHelper pagination;
     private int selectedItemIndex;
     private boolean active = true;
-    
+
     public TaskController() {
     }
 
@@ -63,14 +65,14 @@ public class TaskController implements Serializable {
         if (pagination == null) {
             pagination = new PaginationHelper(10) {
 
-                private List<Task> TaskList() {                    
+                private List<Task> TaskList() {
                     try {
                         getArm().ParseXMLtoProject();
                         getArm().ParseXMLtoTask();
                     } catch (UnsupportedEncodingException ex) {
                         Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    return getFacade().findTaskRange(1, new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()});
+                    return getFacade().findTaskRange(getCu().getCurUser().getId(), new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()});
                 }
 
                 @Override
@@ -94,20 +96,19 @@ public class TaskController implements Serializable {
         recreateModel();
         return "List";
     }
-    
- /*   public String prepareActiveList(){ 
+
+    /*   public String prepareActiveList(){ 
         setActive(true);
         recreateModel();
         return "ActiveList";
     }*/
-
     public String prepareView() {
         current = (Task) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
-    
-    public String pauseTask(models.Process cur){
+
+    public String pauseTask(models.Process cur) {
         cur.calculateFullTime();
         cur.setEnded(true);
         getProcessFacade().edit(cur);
@@ -115,8 +116,8 @@ public class TaskController implements Serializable {
         getFacade().editStatus(task, 4);
         return preparePauseView(task);
     }
-    
-    public String preparePauseView(Task task){
+
+    public String preparePauseView(Task task) {
         current = task;
         return "TaskView";
     }
@@ -203,7 +204,7 @@ public class TaskController implements Serializable {
 
     public DataModel getItems() {
         recreateModel();
-        if (items == null) {            
+        if (items == null) {
             items = getPagination().createPageDataModel();
         }
         return items;
@@ -221,7 +222,7 @@ public class TaskController implements Serializable {
     public String next() {
         getPagination().nextPage();
         recreateModel();
-        
+
         //FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("type", "active");
         return "taskList";
     }
@@ -252,9 +253,11 @@ public class TaskController implements Serializable {
     public boolean isActive() {
         return active;
     }
-    
-    public String activeString(){
-        if (active) return "active";
+
+    public String activeString() {
+        if (active) {
+            return "active";
+        }
         return "";
     }
 
@@ -270,7 +273,7 @@ public class TaskController implements Serializable {
      */
     public DataModel getItemsActive() {
         if (itemsActive == null) {
-            itemsActive = new ListDataModel(getFacade().findActive(2));
+            itemsActive = new ListDataModel(getFacade().findActive(getCu().getCurUser().getId()));
         }
         return itemsActive;
     }
@@ -285,7 +288,6 @@ public class TaskController implements Serializable {
     /**
      * @return the statusFacade
      */
-
     /**
      * @return the processFacade
      */
@@ -298,6 +300,20 @@ public class TaskController implements Serializable {
      */
     private redmine.AccessRM getArm() {
         return arm;
+    }
+
+    /**
+     * @return the cu
+     */
+    public CurrentUser getCu() {
+        return cu;
+    }
+
+    /**
+     * @param cu the cu to set
+     */
+    public void setCu(CurrentUser cu) {
+        this.cu = cu;
     }
 
     @FacesConverter(forClass = Task.class)

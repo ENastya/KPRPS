@@ -18,9 +18,9 @@
             </h:panelGroup>
             <h:form>
                 <h3>
-                <h:outputText value="Общее время: "/>
-                <h:outputText value="#{processController.fullTime(processController.findByTask(taskController.selected.id))}"/>
-                
+                    <h:outputText value="Общее время: "/>
+                    <h:outputText value="#{processController.fullTime(processController.findByTask(taskController.selected.id))}"/>
+
                 </h3>
                 <h:panelGrid columns="2">
                     <h:outputText value="#{taskController.selected.description}"/>

@@ -6,7 +6,10 @@ import jsf.util.PaginationHelper;
 import sb.UserFacade;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -17,6 +20,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import redmine.AccessRM;
 
 @Named("userController")
 @SessionScoped
@@ -26,8 +30,12 @@ public class UserController implements Serializable {
     private DataModel items = null;
     @EJB
     private sb.UserFacade ejbFacade;
+    @EJB
+    private AccessRM arm;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    
+    private CurrentUser cu;
 
     public UserController() {
     }
@@ -55,6 +63,11 @@ public class UserController implements Serializable {
 
                 @Override
                 public DataModel createPageDataModel() {
+                    try {
+                        getArm().ParseXMLtoUser();
+                    } catch (UnsupportedEncodingException ex) {
+                        Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                 }
             };
@@ -77,6 +90,36 @@ public class UserController implements Serializable {
         current = new User();
         selectedItemIndex = -1;
         return "Create";
+    }
+
+    public String singIn() {
+        try {
+            getArm().ParseXMLtoUser();
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (getFacade().existMail(current.getEmail())) {
+            User newcurrent = getFacade().findByMail(current.getEmail());
+            if (newcurrent.getPassword().equals(current.getPassword())) {
+                cu.setCurUser(newcurrent);
+                return "ok";
+            }
+        }
+        return "error";
+    }
+
+    public void sendPass() {
+        try {
+            getArm().ParseXMLtoUser();
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (getFacade().existMail(current.getEmail())) {
+            User newcurrent = getFacade().findByMail(current.getEmail());
+            if (newcurrent.getEmail().equals(current.getEmail())) {
+                getArm().sendPass(newcurrent.getEmail(), newcurrent.getPassword());
+            }
+        }
     }
 
     public String create() {
@@ -154,6 +197,7 @@ public class UserController implements Serializable {
     }
 
     public DataModel getItems() {
+        recreateModel();
         if (items == null) {
             items = getPagination().createPageDataModel();
         }
@@ -190,6 +234,20 @@ public class UserController implements Serializable {
 
     public User getUser(java.lang.Integer id) {
         return ejbFacade.find(id);
+    }
+
+    /**
+     * @return the arm
+     */
+    public AccessRM getArm() {
+        return arm;
+    }
+
+    /**
+     * @return the cu
+     */
+    public CurrentUser getCu() {
+        return cu;
     }
 
     @FacesConverter(forClass = User.class)

@@ -111,5 +111,5 @@ public class Status implements Serializable {
     public String toString() {
         return this.name;
     }
-    
+
 }

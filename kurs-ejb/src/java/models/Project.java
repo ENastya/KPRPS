@@ -159,5 +159,5 @@ public class Project implements Serializable {
     public void setLastEstimate(Date lastEstimate) {
         this.lastEstimate = lastEstimate;
     }
-    
+
 }

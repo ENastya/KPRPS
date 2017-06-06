@@ -29,10 +29,12 @@ public class ProcessController implements Serializable {
     private DataModel items = null;
     @EJB
     private sb.ProcessFacade ejbFacade;
+
+    private CurrentUser cu = new CurrentUser();
     
     @EJB
     private sb.TaskFacade taskFacade;
-    
+
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
@@ -62,17 +64,17 @@ public class ProcessController implements Serializable {
 
                 @Override
                 public DataModel createPageDataModel() {
-                    return new ListDataModel(getFacade().userTaskByDate(2));
+                    return new ListDataModel(getFacade().userTaskByDate(getCu().getCurUser().getId()));
                 }
             };
         }
         return pagination;
     }
-    
+
     public ListDataModel<Process> findByProj(int id) {
         return new ListDataModel(getFacade().procByProj(id));
     }
-    
+
     public ListDataModel<Process> findByTask(int id) {
         return new ListDataModel(getFacade().findEndedProcess(id));
     }
@@ -110,11 +112,11 @@ public class ProcessController implements Serializable {
     public String create(Task task) {
         try {
             //current = null;
-            
+
             getTaskFacade().editStatus(task, 2);
-            
+
             Process newCurrent = getFacade().findActiveProcess(task.getId());
-            
+
             if (newCurrent == null) {
                 newCurrent = new Process();
                 newCurrent.setTaskId(task);
@@ -124,11 +126,9 @@ public class ProcessController implements Serializable {
                 newCurrent.calculateFullTime();
                 getFacade().create(newCurrent);
             }
-            
+
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProcessCreated"));
-            
-            
-            
+
             return startTask(newCurrent);
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -136,10 +136,10 @@ public class ProcessController implements Serializable {
         }
     }
 
-    public boolean mayStart(int id){
+    public boolean mayStart(int id) {
         return getFacade().findUserActiveProcess(id) == null;
     }
-    
+
     public String startTask(Process cur) {
         current = cur;
         //current.calculateFullTime();
@@ -147,7 +147,6 @@ public class ProcessController implements Serializable {
 
         return "Start";
     }
-    
 
     public String prepareEdit() {
         current = (Process) getItems().getRowData();
@@ -264,6 +263,13 @@ public class ProcessController implements Serializable {
      */
     public void setTaskFacade(sb.TaskFacade taskFacade) {
         this.taskFacade = taskFacade;
+    }
+
+    /**
+     * @return the cu
+     */
+    public CurrentUser getCu() {
+        return cu;
     }
 
     @FacesConverter(forClass = Process.class)

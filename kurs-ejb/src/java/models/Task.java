@@ -57,10 +57,10 @@ public class Task implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "Name")
     private String name;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "taskId")
     private List<Process> processList;
-    
+
     @JoinColumn(name = "UserId", referencedColumnName = "Id")
     @ManyToOne(optional = false)
     private User userId;
@@ -165,5 +165,5 @@ public class Task implements Serializable {
     public String toString() {
         return this.name;
     }
-    
+
 }

@@ -26,63 +26,61 @@ public class ProcessFacade extends AbstractFacade<Process> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-     public List<Process> userTaskByDate(int id) {
-        TypedQuery <Process> q;
+
+    public List<Process> userTaskByDate(int id) {
+        TypedQuery<Process> q;
         q = em.createNamedQuery("Process.findByUser", Process.class).setParameter("userid", id);
-       return q.getResultList();
+        return q.getResultList();
     }
-     
-      public List<Process> procByProj(int id) {
-        TypedQuery <Process> q;
+
+    public List<Process> procByProj(int id) {
+        TypedQuery<Process> q;
         q = em.createNamedQuery("Process.findByProject", Process.class).setParameter("projid", id);
-       return q.getResultList();
+        return q.getResultList();
     }
-      
-      public List<Process> findEndedProcess(int id){
-          TypedQuery <Process> q;
-          q = em.createNamedQuery("Process.findByTask", Process.class).setParameter("id", id).setParameter("ended", true);
-          return q.getResultList();
-      }
-      
-      public Process findActiveProcess(int id){
-          TypedQuery <Process> q;
-          q = em.createNamedQuery("Process.findByTask", Process.class).setParameter("id", id).setParameter("ended", false);
-          
-          Process res = null;
-          try {
-              res = q.getSingleResult();
-          }
-          catch(Exception e){
-              
-          }
-          return res;
-      }
-      
-      public void closeActiveProcess(int id){
-          TypedQuery <Process> q;
-          q = em.createNamedQuery("Process.findByTask", Process.class).setParameter("id", id).setParameter("ended", false);
-          List<Process> activeList = q.getResultList();
-          for (Process item: activeList){
-              item.setEnded(true);
-              em.merge(item);
-          }
-      }
-      
+
+    public List<Process> findEndedProcess(int id) {
+        TypedQuery<Process> q;
+        q = em.createNamedQuery("Process.findByTask", Process.class).setParameter("id", id).setParameter("ended", true);
+        return q.getResultList();
+    }
+
+    public Process findActiveProcess(int id) {
+        TypedQuery<Process> q;
+        q = em.createNamedQuery("Process.findByTask", Process.class).setParameter("id", id).setParameter("ended", false);
+
+        Process res = null;
+        try {
+            res = q.getSingleResult();
+        } catch (Exception e) {
+
+        }
+        return res;
+    }
+
+    public void closeActiveProcess(int id) {
+        TypedQuery<Process> q;
+        q = em.createNamedQuery("Process.findByTask", Process.class).setParameter("id", id).setParameter("ended", false);
+        List<Process> activeList = q.getResultList();
+        for (Process item : activeList) {
+            item.setEnded(true);
+            em.merge(item);
+        }
+    }
+
     public ProcessFacade() {
         super(Process.class);
     }
-    
-    public Process findUserActiveProcess(int id){
-          TypedQuery <Process> q;
-          q = em.createNamedQuery("Process.findByUserActive", Process.class).setParameter("id", id).setParameter("ended", false);
-          Process res = null;
-          try {
-              res = q.getSingleResult();
-          }
-          catch(Exception e){
-              
-          }
-          return res;
-      }
+
+    public Process findUserActiveProcess(int id) {
+        TypedQuery<Process> q;
+        q = em.createNamedQuery("Process.findByUserActive", Process.class).setParameter("id", id).setParameter("ended", false);
+        Process res = null;
+        try {
+            res = q.getSingleResult();
+        } catch (Exception e) {
+
+        }
+        return res;
+    }
 }

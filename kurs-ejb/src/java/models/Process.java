@@ -32,13 +32,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Process.findAll", query = "SELECT p FROM Process p"),
-    
+
     @NamedQuery(name = "Process.findByProject", query = "SELECT p FROM Process p WHERE p.taskId.projectId.id = :projid and p.taskId.projectId.lastEstimate < p.eTime and p.Ended = true"),
     @NamedQuery(name = "Process.findByUser", query = "SELECT p FROM Process p WHERE p.taskId.userId.id = :userid and p.taskId.userId.lastEstimate < p.eTime and p.Ended = true"),
-    
+
     @NamedQuery(name = "Process.findByUserActive", query = "SELECT p FROM Process p WHERE p.taskId.userId.id = :id and p.Ended = :ended and p.taskId.userId.lastEstimate < p.eTime"),
     @NamedQuery(name = "Process.findByTask", query = "SELECT p FROM Process p WHERE p.taskId.id = :id and p.Ended = :ended"),
-    
+
     @NamedQuery(name = "Process.findById", query = "SELECT p FROM Process p WHERE p.id = :id"),
     @NamedQuery(name = "Process.findByBTime", query = "SELECT p FROM Process p WHERE p.bTime = :bTime"),
     @NamedQuery(name = "Process.findByETime", query = "SELECT p FROM Process p WHERE p.eTime = :eTime"),
@@ -129,12 +129,12 @@ public class Process implements Serializable {
         setFullTime(newFullTime);
     }
 
-    public String fullTimeToString(){
+    public String fullTimeToString() {
         long time = fullTime.getTime();
         String res = String.format("%02d:%02d:%02d", time / 1000 / 3600, time / 1000 / 60 % 60, time / 1000 % 60);
         return res;
     }
-    
+
     public void setFullTime(Date fullTime) {
         this.fullTime = fullTime;
     }

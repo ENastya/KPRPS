@@ -15,21 +15,15 @@
             </h:panelGroup>
             <h:form>
                 <h:panelGrid columns="2">
-                    <h:outputLabel value="#{bundle.CreateUserLabel_id}" for="id" />
-                    <h:inputText id="id" value="#{userController.selected.id}" title="#{bundle.CreateUserTitle_id}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_id}"/>
-                    <h:outputLabel value="#{bundle.CreateUserLabel_email}" for="email" />
+                    <h:outputLabel value="Введите e-mail" for="email" />
                     <h:inputText id="email" value="#{userController.selected.email}" title="#{bundle.CreateUserTitle_email}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_email}"/>
-                    <h:outputLabel value="#{bundle.CreateUserLabel_role}" for="role" />
-                    <h:inputText id="role" value="#{userController.selected.role}" title="#{bundle.CreateUserTitle_role}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_role}"/>
-                    <h:outputLabel value="#{bundle.CreateUserLabel_lastEstimate}" for="lastEstimate" />
-                    <h:inputText id="lastEstimate" value="#{userController.selected.lastEstimate}" title="#{bundle.CreateUserTitle_lastEstimate}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_lastEstimate}">
-                        <f:convertDateTime pattern="MM/dd/yyyy" />
-                    </h:inputText>
-                    <h:outputLabel value="#{bundle.CreateUserLabel_fio}" for="fio" />
-                    <h:inputText id="fio" value="#{userController.selected.fio}" title="#{bundle.CreateUserTitle_fio}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_fio}"/>
+                    <h:outputLabel value="Введите пароль" for="pass" />
+                    <h:inputText id="pass" value="#{userController.selected.password}" title="#{bundle.CreateUserTitle_email}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_email}"/>
+
                 </h:panelGrid>
                 <br />
-                <h:commandLink action="#{userController.create}" value="#{bundle.CreateUserSaveLink}" />
+                <h:commandLink action="#{userController.singIn()}" value="Войти" />
+                <h:commandLink action="#{userController.sendPass()}" value="Отправьте мне пароль" />
                 <br />
                 <br />
                 <h:commandLink action="#{userController.prepareList}" value="#{bundle.CreateUserShowAllLink}" immediate="true"/>

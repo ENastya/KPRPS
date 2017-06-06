@@ -28,41 +28,41 @@ public class TaskFacade extends AbstractFacade<Task> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     public List<Task> findTaskRange(int id, int[] range) {
         /*javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
         javax.persistence.Query q = getEntityManager().createQuery(cq);*/
-        TypedQuery <Task> q;
-        
-       /* if (active) {
+        TypedQuery<Task> q;
+
+        /* if (active) {
             q = em.createNamedQuery("Task.findActive", Task.class).setParameter("userid", id);
         } 
         else {*/
-            q = em.createNamedQuery("Task.findByUser", Task.class).setParameter("userid", id);
+        q = em.createNamedQuery("Task.findByUser", Task.class).setParameter("userid", id);
         //}
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
         return q.getResultList();
     }
-    
-    public List<Task> findActive(int id){
-        TypedQuery <Task> q;
+
+    public List<Task> findActive(int id) {
+        TypedQuery<Task> q;
         q = em.createNamedQuery("Task.findActive", Task.class).setParameter("userid", id);
         return q.getResultList();
     }
-    
-    public void editStatus(Task task, int statusId){
+
+    public void editStatus(Task task, int statusId) {
         Status status = em.find(Status.class, statusId);
         task.setStausId(status);
         em.merge(task);
     }
-    
+
     public TaskFacade() {
         super(Task.class);
     }
-    
-   /* public List getByUserActive () {
+
+    /* public List getByUserActive () {
         
         return getByUser(id);
     }
@@ -79,5 +79,4 @@ public class TaskFacade extends AbstractFacade<Task> {
         List mylist = q.getResultList();
         return q.getResultList();
     }*/
-    
 }

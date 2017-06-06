@@ -24,9 +24,9 @@ public class StatusFacade extends AbstractFacade<Status> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     public StatusFacade() {
         super(Status.class);
     }
-    
+
 }

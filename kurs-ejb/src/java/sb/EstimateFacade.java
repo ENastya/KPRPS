@@ -41,7 +41,7 @@ public class EstimateFacade extends AbstractFacade<Estimate> {
         user.setLastEstimate(curDate);
         em.merge(user);
     }
-    
+
     public void LoadProjEst(int projid) {
         Project proj = em.find(Project.class, projid);
         Estimate est = new Estimate();
@@ -54,7 +54,7 @@ public class EstimateFacade extends AbstractFacade<Estimate> {
         proj.setLastEstimate(curDate);
         em.merge(proj);
     }
-    
+
     public EstimateFacade() {
         super(Estimate.class);
     }

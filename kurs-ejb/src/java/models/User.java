@@ -59,6 +59,10 @@ public class User implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "Role")
     private String role;
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "Password")
+    private String password;
     @Basic(optional = false)
     @NotNull
     @Column(name = "LastEstimate")
@@ -171,5 +175,19 @@ public class User implements Serializable {
     public String toString() {
         return this.fio;
     }
-    
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }
