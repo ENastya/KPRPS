@@ -41,9 +41,6 @@
                             <h:commandLink action="#{taskController.prepareView}" value="Подробнее"/>
                             <h:outputText value=" "/>
 
-                            <h:commandLink action="#{processController.create(item)}" rendered="#{processController.mayStart(item.userId.id)}" value="Начать выполнение" />
-                            <h:outputText value=" "/>
-
                             <h:commandLink action="#{taskController.destroy}" value="Удалить"/>
                         </h:column>
                         <td>

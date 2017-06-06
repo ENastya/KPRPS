@@ -17,19 +17,22 @@
                 <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
             </h:panelGroup>
             <h:form>
+                
+                    <h1><h:outputText value="#{taskController.selected.name}"/></h1>
                 <h3>
                     <h:outputText value="Общее время: "/>
                     <h:outputText value="#{processController.fullTime(processController.findByTask(taskController.selected.id))}"/>
 
                 </h3>
-                <h:panelGrid columns="2">
+                    <h4><h:outputText value="Описание:"/></h4>
                     <h:outputText value="#{taskController.selected.description}"/>
-                    <h:outputText value="Проект"/>
+                    <h4><h:outputText value="Проект:"/></h4>
                     <h:outputText value="#{taskController.selected.projectId.name}"/>
+                    <h4><h:outputText value="Статус:"/></h4>
                     <h:outputText value="#{taskController.selected.stausId.name}"/>
+                    <h4><h:outputText value="Ответствееный:"/></h4>
                     <h:outputText value="#{taskController.selected.userId.id}" />
 
-                </h:panelGrid>
                 <c:set var="status" value="${taskController.selected.stausId.name}" />
                 <c:if test="${status eq 'активная'}">
                     <c:if test="${processController.mayStart(taskController.selected.userId.id)}">

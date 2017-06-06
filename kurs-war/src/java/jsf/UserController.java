@@ -98,6 +98,10 @@ public class UserController implements Serializable {
         return cu.getCurUser()==null;
     }
     
+    public boolean isCurAdmin() {
+        return cu.getCurUser().getRole().equals("admin");
+    }
+    
     public String singOut() {
                 cu.setCurUser(null);
                 return "fail";
