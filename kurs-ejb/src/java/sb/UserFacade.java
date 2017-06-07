@@ -28,7 +28,7 @@ public class UserFacade extends AbstractFacade<User> {
 
     public Boolean existMail(String mail) {
         TypedQuery<User> q = em.createNamedQuery("User.findByEmail", User.class).setParameter("email", mail);
-        if (q.getSingleResult() == null) {
+        if (q.getResultList() == null) {
             return false;
         }
         return true;

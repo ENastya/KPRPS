@@ -19,6 +19,8 @@
                     <h:outputText value="#{processController.fullTime(processController.findByProj(projectController.selected.id))}"/>
 
                 </h3>
+                <h:outputText value="Написано символов: #{textController.sumSymbProj(projectController.selected.id)}"/>
+                <br/>
                 <h:dataTable value="#{processController.findByProj(projectController.selected.id)}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
 
                     <h:column>

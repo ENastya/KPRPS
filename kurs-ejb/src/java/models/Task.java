@@ -41,6 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Task.findActive", query = "SELECT t FROM Task t WHERE t.stausId.name = 'активная' and t.userId.id = :userid")})
 public class Task implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "taskId")
+    private List<Text> textList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -164,6 +167,15 @@ public class Task implements Serializable {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    @XmlTransient
+    public List<Text> getTextList() {
+        return textList;
+    }
+
+    public void setTextList(List<Text> textList) {
+        this.textList = textList;
     }
 
 }

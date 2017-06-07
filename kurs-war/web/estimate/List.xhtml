@@ -19,6 +19,8 @@
                     <h:outputText value="#{processController.fullTime(processController.items)}"/>
                     <h:outputText value=" часов"/>
                 </h3>
+                <h:outputText value="Написано символов: #{textController.sumSymbUser(userController.cu.curUser.id)}"/>
+                <br/>
                 <h:dataTable value="#{processController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
                     <h:column>
                         <f:facet name="header">

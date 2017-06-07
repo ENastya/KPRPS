@@ -1,18 +1,15 @@
 package jsf;
 
+import models.Text;
 import models.Task;
-import models.Process_;
 import jsf.util.JsfUtil;
 import jsf.util.PaginationHelper;
-import sb.TaskFacade;
+import sb.TextFacade;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -23,72 +20,63 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-import models.Status;
-import models.Text;
-import sb.CurrentUser;
 
-@Named("taskController")
+@Named("textController")
 @SessionScoped
-public class TaskController implements Serializable {
+public class TextController implements Serializable {
 
-    private Task current;
+    private Text current;
     private DataModel items = null;
-    private DataModel itemsActive = null;
     @EJB
-    private sb.TaskFacade ejbFacade;
-
-    @EJB
-    private redmine.AccessRM arm;
-    
-    @EJB
-    private CurrentUser cu;
-
-    @EJB
-    private sb.ProcessFacade processFacade;
-
+    private sb.TextFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-    private boolean active = true;
 
-    public TaskController() {
+    public TextController() {
     }
-    
-    public Task getSelected() {
+
+    public Text getSelected() {
         if (current == null) {
-            current = new Task();
+            current = new Text();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private TaskFacade getFacade() {
+    private TextFacade getFacade() {
         return ejbFacade;
     }
 
+    public long sumSymbUser(int id){
+    long sum = 0;
+        List <Text> texts = getFacade().textByUser(id);
+       for (Text t: texts){
+    sum += t.getSymb();
+    }
+    return sum;
+    }
+    
+     public long sumSymbProj(int id){
+    long sum = 0;
+        List <Text> texts = getFacade().textByProj(id);
+       for (Text t: texts){
+    sum += t.getSymb();
+    }
+    return sum;
+    }
+    
     public PaginationHelper getPagination() {
         if (pagination == null) {
             pagination = new PaginationHelper(10) {
 
-                private List<Task> TaskList() {
-                    try {
-                        getArm().ParseXMLtoProject();
-                        getArm().ParseXMLtoTask();
-                    } catch (UnsupportedEncodingException ex) {
-                        Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    return getFacade().findTaskRange(getCu().getCurUser().getId(), new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()});
-                }
-
                 @Override
                 public int getItemsCount() {
-                    return TaskList().size();
+                    return getFacade().count();
                 }
 
                 @Override
                 public DataModel createPageDataModel() {
-                    return new ListDataModel(TaskList());
-
-                    //return new ListDataModel(getFacade().getByUserActive(1, true));
+                    return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                 }
             };
         }
@@ -96,46 +84,30 @@ public class TaskController implements Serializable {
     }
 
     public String prepareList() {
-        setActive(false);
         recreateModel();
         return "List";
     }
 
-    /*   public String prepareActiveList(){ 
-        setActive(true);
-        recreateModel();
-        return "ActiveList";
-    }*/
     public String prepareView() {
-        current = (Task) getItems().getRowData();
+        current = (Text) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "View";
     }
 
-    public String pauseTask(models.Process cur) {
-        cur.calculateFullTime();
-        cur.setEnded(true);
-        getProcessFacade().edit(cur);
-        Task task = cur.getTaskId();
-        getFacade().editStatus(task, 4);
-        return preparePauseView(task);
-    }
-
-    public String preparePauseView(Task task) {
-        current = task;
-        return "TaskView";
-    }
-
     public String prepareCreate() {
-        current = new Task();
+        current = new Text();
         selectedItemIndex = -1;
         return "Create";
     }
 
-    public String create() {
+    public String create(Task task) {
         try {
+            long curTime = System.currentTimeMillis();
+                    Date curDate = new Date(curTime);
+                    current.setDate(curDate);
+                    current.setTaskId(task);
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TaskCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TextCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -144,7 +116,7 @@ public class TaskController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Task) getItems().getRowData();
+        current = (Text) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
@@ -152,7 +124,7 @@ public class TaskController implements Serializable {
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TaskUpdated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TextUpdated"));
             return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -161,7 +133,7 @@ public class TaskController implements Serializable {
     }
 
     public String destroy() {
-        current = (Task) getItems().getRowData();
+        current = (Text) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -185,7 +157,7 @@ public class TaskController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TaskDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("TextDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -207,7 +179,6 @@ public class TaskController implements Serializable {
     }
 
     public DataModel getItems() {
-        recreateModel();
         if (items == null) {
             items = getPagination().createPageDataModel();
         }
@@ -216,7 +187,6 @@ public class TaskController implements Serializable {
 
     private void recreateModel() {
         items = null;
-        //getItems();
     }
 
     private void recreatePagination() {
@@ -226,17 +196,13 @@ public class TaskController implements Serializable {
     public String next() {
         getPagination().nextPage();
         recreateModel();
-
-        //FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("type", "active");
-        return "taskList";
+        return "List";
     }
 
     public String previous() {
         getPagination().previousPage();
         recreateModel();
-        //FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("type", "active");
-
-        return "taskList";
+        return "List";
     }
 
     public SelectItem[] getItemsAvailableSelectMany() {
@@ -247,90 +213,21 @@ public class TaskController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Task getTask(java.lang.Integer id) {
+    public Text getText(java.lang.Integer id) {
         return ejbFacade.find(id);
     }
 
-    /**
-     * @return the active
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    public String activeString() {
-        if (active) {
-            return "active";
-        }
-        return "";
-    }
-
-    /**
-     * @param active the active to set
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
-     * @return the itemsActive
-     */
-    public DataModel getItemsActive() {
-        if (itemsActive == null) {
-            itemsActive = new ListDataModel(getFacade().findActive(getCu().getCurUser().getId()));
-        }
-        return itemsActive;
-    }
-
-    /**
-     * @param itemsActive the itemsActive to set
-     */
-    public void setItemsActive(DataModel itemsActive) {
-        this.itemsActive = itemsActive;
-    }
-
-    /**
-     * @return the statusFacade
-     */
-    /**
-     * @return the processFacade
-     */
-    public sb.ProcessFacade getProcessFacade() {
-        return processFacade;
-    }
-
-    /**
-     * @return the arm
-     */
-    private redmine.AccessRM getArm() {
-        return arm;
-    }
-
-    /**
-     * @return the cu
-     */
-    public CurrentUser getCu() {
-        return cu;
-    }
-
-    /**
-     * @param cu the cu to set
-     */
-    public void setCu(CurrentUser cu) {
-        this.cu = cu;
-    }
-
-    @FacesConverter(forClass = Task.class)
-    public static class TaskControllerConverter implements Converter {
+    @FacesConverter(forClass = Text.class)
+    public static class TextControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            TaskController controller = (TaskController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "taskController");
-            return controller.getTask(getKey(value));
+            TextController controller = (TextController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "textController");
+            return controller.getText(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -350,11 +247,11 @@ public class TaskController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Task) {
-                Task o = (Task) object;
+            if (object instanceof Text) {
+                Text o = (Text) object;
                 return getStringKey(o.getId());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Task.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Text.class.getName());
             }
         }
 

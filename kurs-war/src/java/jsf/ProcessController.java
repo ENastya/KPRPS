@@ -20,6 +20,7 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import models.Task;
+import models.Text;
 import sb.CurrentUser;
 
 @Named("processController")
@@ -41,7 +42,9 @@ public class ProcessController implements Serializable {
 
     public ProcessController() {
     }
-
+    
+    
+    
     public Process getSelected() {
         if (current == null) {
             current = new Process();
