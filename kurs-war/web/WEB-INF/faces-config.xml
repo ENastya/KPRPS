@@ -76,5 +76,9 @@
             <from-outcome>fail</from-outcome>
             <to-view-id>/user/Create.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>sendPass</from-outcome>
+            <to-view-id>/user/SendPass.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

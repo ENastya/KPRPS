@@ -20,28 +20,11 @@
                     <h:panelGrid columns="2">
                         <h:outputLabel value="Введите e-mail" for="email" />
                         <h:inputText id="email" value="#{userController.selected.email}" title="#{bundle.CreateUserTitle_email}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_email}"/>
-                        <h:outputLabel value="Введите пароль" for="pass" />
-                        <h:inputText id="pass" value="#{userController.selected.password}" title="#{bundle.CreateUserTitle_email}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_email}"/>
-                    </h:panelGrid>
-                    <p>Забыли пароль? - <h:link outcome="sendPass" value="Восстановить" /></p>
+                        </h:panelGrid>
                     <br />
-                    <h:commandLink action="#{userController.singIn()}" value="Войти" />
+                    <h:commandLink action="#{userController.sendPass()}" value="Восстановить" />
                     <br/>
                 </c:if>
-
-                <c:if test="${!userController.isCurUser()}">
-                    <h:panelGrid columns="2">
-                        <h1><h:outputText value="Здраствуйте, #{userController.getCu().curUser.fio}"/></h1>
-
-                        <br/>
-                        <h:commandLink action="#{userController.singIn()}" value="Перейти в систему" />
-                        <br/>
-                        <h:commandLink action="#{userController.singOut()}" value="Выйти" />
-                    </h:panelGrid>
-                </c:if>
-                <br />
-                <h:commandLink action="#{userController.prepareList}" value="#{bundle.CreateUserShowAllLink}" immediate="true"/>
-                <br />
                 <br />
             </h:form>
         </ui:define>
