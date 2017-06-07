@@ -36,7 +36,7 @@ public class TextFacade extends AbstractFacade<Text> {
     
     public List<Text> textByProj(int id) {
         TypedQuery<Text> q;
-        q = em.createNamedQuery("Text.findByUser", Text.class).setParameter("projid", id);
+        q = em.createNamedQuery("Text.findByProject", Text.class).setParameter("projid", id);
         return q.getResultList();
     }
     
