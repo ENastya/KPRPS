@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            Добро пожаловать
+        </ui:define>
+        <ui:define name="slider">
+            <li><img src="#{resource['img/slider/11.jpg']}" alt="slider" />
+                <p class="flex-caption">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula.</p>
+            </li>
+            <li><img src="#{resource['img/slider/22.jpg']}"  alt="slider" />
+                <p class="flex-caption">Lorem ipsum dolor sit amet.</p>
+            </li>
+            <li> <img src="#{resource['img/slider/33.jpg']}"  alt="slider" />
+                <p class="flex-caption">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </p>
+            </li>
+            <li> <img src="#{resource['img/slider/44.jpg']}"  alt="slider" />
+                <p class="flex-caption">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. </p>
+            </li>
+            <li> <img src="#{resource['img/slider/55.jpg']}"  alt="slider" />
+                <p class="flex-caption">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. </p>
+            </li>
+            <li> <img src="#{resource['img/slider/66.jpg']}"  alt="slider" />
+                <p class="flex-caption">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. </p>
+            </li>
+        </ui:define>
+        
+        <ui:define name="body">
+            <c:if test="${userController.isCurUser()}"><h1>Вам необходимо войти в систему</h1></c:if>
+            
+        <c:if test="${!userController.isCurUser()}">
+            <!-- Projects-->
+            <div id="projects" class="projects">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-sm-12">
+                            <div class=" container TitleSection">
+                                <header class="page-head">
+                                    <h1>Панель<small> // Управления</small></h1>
+                                </header>
+                            </div>
+                            <p class="subtitle">С помощью этой панели ты можешь легко управлять всеми доступными функциями</p>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-12 col-sm-12">
+                                    <div class="project_wrap">
+                                        <ul class="cbp-ig-grid">
+                                            
+                                            <li> <h:link outcome="/task/List" > <span class="cbp-ig-icon designmodo-location"></span>
+                                                    <h3 class="cbp-ig-title">Задачи</h3>
+                                                    <span class="cbp-ig-category">смотреть все</span> </h:link> </li>
+                                            <li>  <h:link outcome="/task/ActiveList" > <span class="cbp-ig-icon designmodo-settings"></span>
+                                                    <h3 class="cbp-ig-title">Активные задачи</h3>
+                                                    <span class="cbp-ig-category">смотреть все</span>
+                                                    <!--f:param name="type" value="active" /-->
+                                                </h:link> </li>
+                                            <li> <h:link outcome="/estimate/List" > <span class="cbp-ig-icon joshua-barker-landscape"></span>
+                                                    <h3 class="cbp-ig-title">Сметы</h3>
+                                                    <span class="cbp-ig-category">смотреть все</span> </h:link> </li>
+                                                    <c:if test="${userController.isCurAdmin()}">
+                                            <li> <h:link outcome="/user/List" > <span class="cbp-ig-icon cole-townsend-chat"></span>
+                                                    <h3 class="cbp-ig-title">Пользователи</h3>
+                                                    <span class="cbp-ig-category">смотреть все</span> </h:link> </li>
+                                            <li> <h:link outcome="/project/List" > <span class="cbp-ig-icon cesgra-globe"></span>
+                                                    <h3 class="cbp-ig-title">Проекты</h3>
+                                                    <span class="cbp-ig-category">смотреть все</span> </h:link> </li>
+                                            <li> <h:link outcome="/process/List" > <span class="cbp-ig-icon dom-waters-speedo"></span>
+                                                    <h3 class="cbp-ig-title">Процессы</h3>
+                                                    <span class="cbp-ig-category">смотреть все</span> </h:link> </li> </c:if>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- projects --> 
+             </c:if>
+
+        </ui:define>
+       
+    </ui:composition>
+
+
+
+
+</html>
+

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditTextTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditTextLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{textController.selected.id}" title="#{bundle.EditTextTitle_id}" required="true" requiredMessage="#{bundle.EditTextRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.EditTextLabel_symb}" for="symb" />
+                    <h:inputText id="symb" value="#{textController.selected.symb}" title="#{bundle.EditTextTitle_symb}" required="true" requiredMessage="#{bundle.EditTextRequiredMessage_symb}"/>
+                    <h:outputLabel value="#{bundle.EditTextLabel_date}" for="date" />
+                    <h:inputText id="date" value="#{textController.selected.date}" title="#{bundle.EditTextTitle_date}" required="true" requiredMessage="#{bundle.EditTextRequiredMessage_date}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditTextLabel_taskId}" for="taskId" />
+                    <h:selectOneMenu id="taskId" value="#{textController.selected.taskId}" title="#{bundle.EditTextTitle_taskId}" required="true" requiredMessage="#{bundle.EditTextRequiredMessage_taskId}">
+                        <f:selectItems value="#{taskController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{textController.update}" value="#{bundle.EditTextSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditTextViewLink}"/>
+                <br />
+                <h:commandLink action="#{textController.prepareList}" value="#{bundle.EditTextShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditTextIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

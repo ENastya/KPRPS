@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+
+            <h:outputText value="#{bundle.CreateUserTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <c:if test="${userController.isCurUser()}">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Введите e-mail" for="email" />
+                        <h:inputText id="email" value="#{userController.selected.email}" title="#{bundle.CreateUserTitle_email}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_email}"/>
+                        <h:outputLabel value="Введите пароль" for="pass" />
+                        <h:inputSecret id="pass" value="#{userController.selected.password}" title="#{bundle.CreateUserTitle_email}" required="true" requiredMessage="#{bundle.CreateUserRequiredMessage_email}"/>
+                    </h:panelGrid>
+                    <p>Забыли пароль? - <h:link outcome="sendPass" value="Восстановить" /></p>
+                    <br />
+                    <h:commandLink action="#{userController.singIn()}" value="Войти" />
+                    <br/>
+                </c:if>
+
+                <c:if test="${!userController.isCurUser()}">
+                    <h:panelGrid columns="2">
+                        <h1><h:outputText value="Здраствуйте, #{userController.getCu().curUser.fio}"/></h1>
+
+                        <br/>
+                        <h:commandLink action="#{userController.singIn()}" value="Перейти в систему" />
+                        <br/>
+                        <h:commandLink action="#{userController.singOut()}" value="Выйти" />
+                    </h:panelGrid>
+                </c:if>
+                <br />
+                <h:commandLink action="#{userController.prepareList}" value="#{bundle.CreateUserShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

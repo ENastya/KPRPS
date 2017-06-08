@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListTextTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:form styleClass="jsfcrud_list_form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:outputText escape="false" value="#{bundle.ListTextEmpty}" rendered="#{textController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{textController.items.rowCount > 0}">
+                    <h:outputText value="#{textController.pagination.pageFirstItem + 1}..#{textController.pagination.pageLastItem + 1}/#{textController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{textController.previous}" value="#{bundle.Previous} #{textController.pagination.pageSize}" rendered="#{textController.pagination.hasPreviousPage}"/>&nbsp;
+                    <h:commandLink action="#{textController.next}" value="#{bundle.Next} #{textController.pagination.pageSize}" rendered="#{textController.pagination.hasNextPage}"/>&nbsp;
+                    <h:dataTable value="#{textController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListTextTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListTextTitle_symb}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.symb}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListTextTitle_date}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.date}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListTextTitle_taskId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.taskId}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                            <h:commandLink action="#{textController.prepareView}" value="#{bundle.ListTextViewLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{textController.prepareEdit}" value="#{bundle.ListTextEditLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{textController.destroy}" value="#{bundle.ListTextDestroyLink}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+                <br />
+                <h:commandLink action="#{textController.prepareCreate}" value="#{bundle.ListTextCreateLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ListTextIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
